@@ -6,21 +6,30 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:init": "tsx src/server/db/init.ts",
+    "auth:register-dev": "tsx src/modules/auth/infrastructure/register-user-dev.ts",
+    "auth:authenticate-dev": "tsx src/modules/auth/infrastructure/authenticate-user-dev.ts",
+    "auth:login-dev": "tsx src/modules/auth/infrastructure/login-user-dev.ts",
+    "auth:get-current-user-dev": "tsx src/modules/auth/infrastructure/get-current-user-dev.ts"
   },
   "dependencies": {
+    "better-sqlite3": "^12.8.0",
     "next": "16.2.1",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "server-only": "^0.0.1"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
-    "@types/node": "^20",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.2.1",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

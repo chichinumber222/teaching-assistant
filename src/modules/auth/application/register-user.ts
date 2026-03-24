@@ -1,0 +1,37 @@
+import type { PasswordHasher } from "../domain/password-hasher";
+import type { UserRepository } from "../domain/user-repository";
+import { User, UserRole } from "../domain/user";
+
+export type RegisterUserInput  = {
+  email: string;
+  password: string;
+  role: UserRole;
+};
+
+export class EmailAlreadyInUseError extends Error {
+  constructor(email: string) {
+    super(`User with email "${email}" already exists`);
+    this.name = "EmailAlreadyInUseError";
+  }
+}
+
+export class RegisterUser {
+  constructor(
+    private readonly userRepository: UserRepository,
+    private readonly passwordHasher: PasswordHasher
+  ) {}
+
+  execute(input: RegisterUserInput): User {
+    const existingUser = this.userRepository.findByEmail(input.email);
+    if (existingUser) {
+      throw new EmailAlreadyInUseError(input.email);
+    }
+    const passwordHash = this.passwordHasher.hash(input.password);
+
+    return this.userRepository.create({
+      email: input.email,
+      passwordHash,
+      role: input.role,
+    });
+  }
+}
