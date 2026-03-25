@@ -5,9 +5,7 @@ export type LogoutUserInput = {
 };
 
 export class LogoutUser {
-  constructor(
-    private readonly sessionRepository: SessionRepository,
-  ) {}
+  constructor(private readonly sessionRepository: SessionRepository) {}
 
   execute(input: LogoutUserInput): void {
     const session = this.sessionRepository.findById(input.sessionId);

@@ -5,13 +5,13 @@ import {
   InvalidCredentialsError,
 } from "@/modules/auth/application/authenticate-user";
 import { LoginUser } from "@/modules/auth/application/login-user";
-import { ScryptPasswordHasher } from "@/modules/auth/infrastructure/scrypt-password-hasher";
-import { SqliteSessionRepository } from "@/modules/auth/infrastructure/sqlite-session-repository";
-import { SqliteUserRepository } from "@/modules/auth/infrastructure/sqlite-user-repository";
+import { ScryptPasswordHasher } from "@/modules/auth/infrastructure/server/scrypt-password-hasher";
+import { SqliteSessionRepository } from "@/modules/auth/infrastructure/server/sqlite-session-repository";
+import { SqliteUserRepository } from "@/modules/auth/infrastructure/server/sqlite-user-repository";
 import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
-} from "@/modules/auth/infrastructure/auth-cookie";
+} from "@/modules/auth/infrastructure/server/auth-cookie";
 
 type LoginRequestBody = {
   email: string;

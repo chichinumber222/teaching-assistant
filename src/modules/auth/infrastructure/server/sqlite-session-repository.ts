@@ -1,10 +1,10 @@
 import { randomUUID } from "node:crypto";
 import { db } from "@/server/db/client";
-import type { Session } from "../domain/session";
+import type { Session } from "../../domain/session";
 import type {
   SessionRepository,
   CreateSessionData,
-} from "../domain/session-repository";
+} from "../../domain/session-repository";
 
 type SessionRow = {
   id: string;
@@ -87,7 +87,7 @@ export class SqliteSessionRepository implements SessionRepository {
       revokedAt: null,
       ipAddress: data.ipAddress,
       userAgent: data.userAgent,
-    }
+    };
   }
 
   updateLastSeenAt(id: string, lastSeenAt: string): void {

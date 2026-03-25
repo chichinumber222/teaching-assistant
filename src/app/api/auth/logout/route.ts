@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { LogoutUser } from "@/modules/auth/application/logout-user";
-import { SqliteSessionRepository } from "@/modules/auth/infrastructure/sqlite-session-repository";
+import { SqliteSessionRepository } from "@/modules/auth/infrastructure/server/sqlite-session-repository";
 import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
-} from "@/modules/auth/infrastructure/auth-cookie";
+} from "@/modules/auth/infrastructure/server/auth-cookie";
 
 export async function POST(request: NextRequest) {
   const sessionId = request.cookies.get(AUTH_SESSION_COOKIE_NAME)?.value;

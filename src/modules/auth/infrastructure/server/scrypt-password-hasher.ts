@@ -1,5 +1,5 @@
 import { randomBytes, scryptSync, timingSafeEqual } from "node:crypto";
-import { PasswordHasher } from "../domain/password-hasher";
+import { PasswordHasher } from "@/modules/auth/domain/password-hasher";
 
 const SALT_LENGTH = 16;
 const KEY_LENGTH = 64;

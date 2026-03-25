@@ -27,7 +27,7 @@ export class GetCurrentUser {
 
   execute(input: GetCurrentUserInput): GetCurrentUserResult {
     const session = this.sessionRepository.findById(input.sessionId);
-    
+
     if (!session) {
       throw new InvalidSessionError();
     }

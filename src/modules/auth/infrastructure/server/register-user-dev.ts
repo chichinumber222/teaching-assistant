@@ -1,4 +1,4 @@
-import { RegisterUser } from "../application/register-user";
+import { RegisterUser } from "@/modules/auth/application/register-user";
 import { ScryptPasswordHasher } from "./scrypt-password-hasher";
 import { SqliteUserRepository } from "./sqlite-user-repository";
 

@@ -13,11 +13,11 @@
   "iconLibrary": "tabler",
   "rtl": false,
   "aliases": {
-    "components": "@/components",
-    "utils": "@/lib/utils",
-    "ui": "@/components/ui",
-    "lib": "@/lib",
-    "hooks": "@/hooks"
+    "ui": "@/shared/ui/components",
+    "components": "@/shared/ui",
+    "utils": "@/shared/ui/lib/utils",
+    "lib": "@/shared/ui/lib",
+    "hooks": "@/shared/ui/hooks"
   },
   "menuColor": "default",
   "menuAccent": "bold",

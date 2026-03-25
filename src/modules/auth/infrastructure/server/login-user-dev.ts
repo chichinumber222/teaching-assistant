@@ -1,5 +1,5 @@
-import { AuthenticateUser } from "../application/authenticate-user";
-import { LoginUser } from "../application/login-user";
+import { AuthenticateUser } from "@/modules/auth/application/authenticate-user";
+import { LoginUser } from "@/modules/auth/application/login-user";
 import { ScryptPasswordHasher } from "./scrypt-password-hasher";
 import { SqliteSessionRepository } from "./sqlite-session-repository";
 import { SqliteUserRepository } from "./sqlite-user-repository";

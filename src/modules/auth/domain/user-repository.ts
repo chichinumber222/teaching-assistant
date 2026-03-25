@@ -1,4 +1,5 @@
-import type { User, UserRole } from "./user";
+import type { User } from "./user";
+import type { UserRole } from "./user-role";
 
 export type CreateUserData = {
   email: string;

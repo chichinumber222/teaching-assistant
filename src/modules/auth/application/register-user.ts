@@ -1,8 +1,9 @@
 import type { PasswordHasher } from "../domain/password-hasher";
 import type { UserRepository } from "../domain/user-repository";
-import { User, UserRole } from "../domain/user";
+import type { User } from "../domain/user";
+import type { UserRole } from "../domain/user-role";
 
-export type RegisterUserInput  = {
+export type RegisterUserInput = {
   email: string;
   password: string;
   role: UserRole;
@@ -18,7 +19,7 @@ export class EmailAlreadyInUseError extends Error {
 export class RegisterUser {
   constructor(
     private readonly userRepository: UserRepository,
-    private readonly passwordHasher: PasswordHasher
+    private readonly passwordHasher: PasswordHasher,
   ) {}
 
   execute(input: RegisterUserInput): User {

@@ -3,9 +3,9 @@ import {
   GetCurrentUser,
   InvalidSessionError,
 } from "@/modules/auth/application/get-current-user";
-import { SqliteSessionRepository } from "@/modules/auth/infrastructure/sqlite-session-repository";
-import { SqliteUserRepository } from "@/modules/auth/infrastructure/sqlite-user-repository";
-import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/infrastructure/auth-cookie";
+import { SqliteSessionRepository } from "@/modules/auth/infrastructure/server/sqlite-session-repository";
+import { SqliteUserRepository } from "@/modules/auth/infrastructure/server/sqlite-user-repository";
+import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/infrastructure/server/auth-cookie";
 
 export async function GET(request: NextRequest) {
   try {

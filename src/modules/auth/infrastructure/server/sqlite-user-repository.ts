@@ -1,8 +1,12 @@
 import { randomUUID } from "node:crypto";
 import { db } from "@/server/db/client";
 
-import { CreateUserData, UserRepository } from "../domain/user-repository";
-import { User, UserRole } from "../domain/user";
+import type {
+  CreateUserData,
+  UserRepository,
+} from "../../domain/user-repository";
+import type { User } from "../../domain/user";
+import type { UserRole } from "../../domain/user-role";
 
 type UserRow = {
   id: string;
