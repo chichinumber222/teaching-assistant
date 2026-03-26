@@ -9,3 +9,5 @@ export const loginSchema = z.object({
     .min(6, { message: "Пароль должен содержать минимум 6 символов" })
     .max(100, { message: "Пароль не может превышать 100 символов" }),
 });
+
+export type LoginData = z.infer<typeof loginSchema>;
