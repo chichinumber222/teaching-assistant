@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import {
-  GetCurrentUser,
-  InvalidSessionError,
-} from "@/modules/auth/application/get-current-user";
-import { SqliteSessionRepository } from "@/modules/auth/infrastructure/server/sqlite-session-repository";
-import { SqliteUserRepository } from "@/modules/auth/infrastructure/server/sqlite-user-repository";
+import { InvalidSessionError } from "@/modules/auth/application/get-current-user";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/infrastructure/server/auth-cookie";
+import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 
 export async function GET(request: NextRequest) {
   try {
@@ -15,25 +12,11 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const sessionRepository = new SqliteSessionRepository();
-    const userRepository = new SqliteUserRepository();
-
-    const getCurrentUser = new GetCurrentUser(
-      sessionRepository,
-      userRepository,
-    );
-
+    const { getCurrentUser } = createAuthServices();
     const result = getCurrentUser.execute({ sessionId });
 
     return NextResponse.json({
-      user: {
-        id: result.user.id,
-        email: result.user.email,
-        role: result.user.role,
-        isActive: result.user.isActive,
-        createdAt: result.user.createdAt,
-        updatedAt: result.user.updatedAt,
-      },
+      user: mapUserToPublicUserDto(result.user),
     });
   } catch (error) {
     if (error instanceof InvalidSessionError) {

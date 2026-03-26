@@ -8,10 +8,10 @@
     "start": "next start",
     "lint": "eslint",
     "db:init": "tsx src/server/db/init.ts",
-    "auth:register-dev": "tsx src/modules/auth/infrastructure/register-user-dev.ts",
-    "auth:authenticate-dev": "tsx src/modules/auth/infrastructure/authenticate-user-dev.ts",
-    "auth:login-dev": "tsx src/modules/auth/infrastructure/login-user-dev.ts",
-    "auth:get-current-user-dev": "tsx src/modules/auth/infrastructure/get-current-user-dev.ts"
+    "auth:register-dev": "tsx src/modules/auth/infrastructure/server/register-user-dev.ts",
+    "auth:authenticate-dev": "tsx src/modules/auth/infrastructure/server/authenticate-user-dev.ts",
+    "auth:login-dev": "tsx src/modules/auth/infrastructure/server/login-user-dev.ts",
+    "auth:get-current-user-dev": "tsx src/modules/auth/infrastructure/server/get-current-user-dev.ts"
   },
   "dependencies": {
     "@tabler/icons-react": "^3.40.0",

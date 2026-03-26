@@ -2,6 +2,7 @@ import type { User } from "./user";
 import type { UserRole } from "./user-role";
 
 export type CreateUserData = {
+  name: string;
   email: string;
   passwordHash: string;
   role: UserRole;

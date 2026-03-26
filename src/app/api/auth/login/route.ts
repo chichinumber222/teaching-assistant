@@ -1,41 +1,33 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  AuthenticateUser,
   InactiveUserError,
   InvalidCredentialsError,
 } from "@/modules/auth/application/authenticate-user";
-import { LoginUser } from "@/modules/auth/application/login-user";
-import { ScryptPasswordHasher } from "@/modules/auth/infrastructure/server/scrypt-password-hasher";
-import { SqliteSessionRepository } from "@/modules/auth/infrastructure/server/sqlite-session-repository";
-import { SqliteUserRepository } from "@/modules/auth/infrastructure/server/sqlite-user-repository";
 import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
 } from "@/modules/auth/infrastructure/server/auth-cookie";
-
-type LoginRequestBody = {
-  email: string;
-  password: string;
-};
+import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
+import { loginRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";
 
 export async function POST(request: NextRequest) {
   try {
-    const body = (await request.json()) as LoginRequestBody;
+    const json = await request.json()
+    const parsedBody = loginRequestSchema.safeParse(json);
 
-    const userRepository = new SqliteUserRepository();
-    const passwordHasher = new ScryptPasswordHasher();
-    const sessionRepository = new SqliteSessionRepository();
+    if (!parsedBody.success) {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
 
-    const authenticateUser = new AuthenticateUser(
-      userRepository,
-      passwordHasher,
-    );
-
-    const loginUser = new LoginUser(authenticateUser, sessionRepository);
+    const { loginUser } = createAuthServices();
 
     const result = loginUser.execute({
-      email: body.email,
-      password: body.password,
+      email: parsedBody.data.email,
+      password: parsedBody.data.password,
       ipAddress:
         request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
         request.headers.get("x-real-ip") ||
@@ -44,14 +36,7 @@ export async function POST(request: NextRequest) {
     });
 
     const response = NextResponse.json({
-      user: {
-        id: result.user.id,
-        email: result.user.email,
-        role: result.user.role,
-        isActive: result.user.isActive,
-        createdAt: result.user.createdAt,
-        updatedAt: result.user.updatedAt,
-      },
+      user: mapUserToPublicUserDto(result.user),
     });
 
     response.cookies.set(

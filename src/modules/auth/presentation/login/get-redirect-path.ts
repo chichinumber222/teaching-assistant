@@ -1,11 +1,11 @@
-import type { UserRole } from "@/modules/auth/domain/user-role";
+import { UserRole } from "@/modules/auth/domain/user-role";
 
 export function getLoginRedirectPath(role: UserRole): string {
   switch (role) {
-    case "admin":
+    case UserRole.Admin:
       return "/admin";
 
-    case "teacher":
+    case UserRole.Teacher:
       return "/";
 
     default:

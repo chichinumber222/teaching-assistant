@@ -3,18 +3,18 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { LoginRequestDto } from "@/modules/auth/infrastructure/http/auth-api-client";
+import { RegisterRequestDto } from "@/modules/auth/infrastructure/http/auth-api-client";
 import { authClient } from "@/modules/auth/infrastructure/http/auth-client";
-import { getLoginRedirectPath } from "./get-redirect-path";
+import { getRegisterRedirectPath } from "./get-redirect-path";
 
-type UseLoginResult = {
-  login: (payload: LoginRequestDto) => Promise<boolean>;
+type UseRegisterResult = {
+  register: (payload: RegisterRequestDto) => Promise<boolean>;
   globalError: string | null;
   isGlobalLoading: boolean;
   clearGlobalError: () => void;
 };
 
-export function useLogin(): UseLoginResult {
+export function useRegister(): UseRegisterResult {
   const router = useRouter();
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
@@ -23,38 +23,32 @@ export function useLogin(): UseLoginResult {
     setGlobalError(null);
   };
 
-  const login = async (payload: LoginRequestDto): Promise<boolean> => {
+  const register = async (payload: RegisterRequestDto): Promise<boolean> => {
     setGlobalError(null);
     setIsGlobalLoading(true);
 
     try {
-      const { user } = await authClient.login(payload);
+      await authClient.register(payload);
 
       router.refresh();
-      router.push(getLoginRedirectPath(user.role));
+      router.push(getRegisterRedirectPath());
 
       return true;
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
 
-        if (status === 400) {
+        if (status === 409) {
+          setGlobalError("Пользователь с таким email уже существует");
+        } else if (status === 400) {
           setGlobalError("Проверьте введенные данные");
-        } else if (status === 401) {
-          setGlobalError("Неверный email или пароль");
-        } else if (status === 403) {
-          setGlobalError(
-            "Ваш аккаунт временно недоступен. Свяжитесь с поддержкой.",
-          );
         } else {
           setGlobalError(
-            "Произошла непредвиденная ошибка. Попробуйте еще раз позже",
+            "Не удалось создать аккаунт. Попробуйте еще раз позже",
           );
         }
       } else {
-        setGlobalError(
-          "Произошла непредвиденная ошибка. Попробуйте еще раз позже",
-        );
+        setGlobalError("Не удалось создать аккаунт. Попробуйте еще раз позже");
       }
 
       return false;
@@ -64,7 +58,7 @@ export function useLogin(): UseLoginResult {
   };
 
   return {
-    login,
+    register,
     globalError,
     isGlobalLoading,
     clearGlobalError,

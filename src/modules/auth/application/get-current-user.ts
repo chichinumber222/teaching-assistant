@@ -1,7 +1,7 @@
-import { SessionRepository } from "../domain/session-repository";
-import { UserRepository } from "../domain/user-repository";
-import { Session } from "../domain/session";
-import { User } from "../domain/user";
+import type { SessionRepository } from "@/modules/auth/domain/session-repository";
+import type { UserRepository } from "@/modules/auth/domain/user-repository";
+import type { Session } from "@/modules/auth/domain/session";
+import type { User } from "@/modules/auth/domain/user";
 
 export type GetCurrentUserInput = {
   sessionId: string;

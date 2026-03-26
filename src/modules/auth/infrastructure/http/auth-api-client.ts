@@ -1,30 +1,43 @@
 import type { HttpClient } from "@/shared/lib/http/http-client";
 import type { UserRole } from "@/modules/auth/domain/user-role";
 
+export type RegisterRequestDto = {
+  name: string;
+  email: string;
+  password: string;
+};
+
 export type LoginRequestDto = {
   email: string;
   password: string;
 };
 
-export type AuthUserDto = {
-  id: string;
-  email: string;
-  role: UserRole;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+export type AuthResponseDto = {
+  user: {
+    id: string;
+    name: string;
+    email: string;
+    role: UserRole;
+    isActive: boolean;
+    createdAt: string;
+    updatedAt: string;
+  };
 };
 
-export type LoginResponseDto = {
-  user: AuthUserDto;
-};
-
-export type CurrentUserResponseDto = {
-  user: AuthUserDto;
-};
+export type RegisterResponseDto = AuthResponseDto;
+export type LoginResponseDto = AuthResponseDto;
+export type CurrentUserResponseDto = AuthResponseDto;
 
 export class AuthApiClient {
   constructor(private readonly httpClient: HttpClient) {}
+
+  async register(payload: RegisterRequestDto): Promise<RegisterResponseDto> {
+    return this.httpClient.request<RegisterResponseDto, RegisterRequestDto>({
+      method: "POST",
+      url: "/api/auth/register",
+      body: payload,
+    });
+  }
 
   async login(payload: LoginRequestDto): Promise<LoginResponseDto> {
     return this.httpClient.request<LoginResponseDto, LoginRequestDto>({

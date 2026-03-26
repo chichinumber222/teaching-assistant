@@ -10,6 +10,7 @@ import type { UserRole } from "../../domain/user-role";
 
 type UserRow = {
   id: string;
+  name: string;
   email: string;
   password_hash: string;
   role: UserRole;
@@ -21,6 +22,7 @@ type UserRow = {
 function mapRowToUser(row: UserRow): User {
   return {
     id: row.id,
+    name: row.name,
     email: row.email,
     passwordHash: row.password_hash,
     role: row.role,
@@ -33,7 +35,7 @@ function mapRowToUser(row: UserRow): User {
 export class SqliteUserRepository implements UserRepository {
   findByEmail(email: string): User | null {
     const statement = db.prepare<[string], UserRow>(
-      `SELECT id, email, password_hash, role, is_active, created_at, updated_at
+      `SELECT id, name, email, password_hash, role, is_active, created_at, updated_at
        FROM users
        WHERE email = ?`,
     );
@@ -47,7 +49,7 @@ export class SqliteUserRepository implements UserRepository {
 
   findById(id: string): User | null {
     const statement = db.prepare<[string], UserRow>(
-      `SELECT id, email, password_hash, role, is_active, created_at, updated_at
+      `SELECT id, name, email, password_hash, role, is_active, created_at, updated_at
        FROM users
        WHERE id = ?`,
     );
@@ -64,13 +66,14 @@ export class SqliteUserRepository implements UserRepository {
     const id = randomUUID();
     const now = new Date().toISOString();
     const statement = db.prepare(
-      `INSERT INTO users (id, email, password_hash, role, is_active, created_at, updated_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO users (id, name, email, password_hash, role, is_active, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     );
-    statement.run(id, data.email, data.passwordHash, data.role, 1, now, now);
+    statement.run(id, data.name, data.email, data.passwordHash, data.role, 1, now, now);
 
     return {
       id,
+      name: data.name,
       email: data.email,
       passwordHash: data.passwordHash,
       role: data.role,
