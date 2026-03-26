@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
-} from "@/modules/auth/infrastructure/server/auth-cookie";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory"
+} from "@/modules/auth/shared/auth-cookie";
+import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 
 export async function POST(request: NextRequest) {
   try {

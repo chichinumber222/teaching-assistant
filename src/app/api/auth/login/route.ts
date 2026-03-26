@@ -6,14 +6,14 @@ import {
 import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
-} from "@/modules/auth/infrastructure/server/auth-cookie";
+} from "@/modules/auth/shared/auth-cookie";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 import { loginRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";
 
 export async function POST(request: NextRequest) {
   try {
-    const json = await request.json()
+    const json = await request.json();
     const parsedBody = loginRequestSchema.safeParse(json);
 
     if (!parsedBody.success) {

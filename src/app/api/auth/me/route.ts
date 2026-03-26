@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { InvalidSessionError } from "@/modules/auth/application/get-current-user";
-import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/infrastructure/server/auth-cookie";
+import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 

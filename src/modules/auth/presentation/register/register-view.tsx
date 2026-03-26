@@ -6,6 +6,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/components/card";
+import { APP_ROUTES } from "@/shared/config/routes";
+import { AuthLink } from "@/shared/ui/components/auth-link";
 
 export function RegisterView() {
   return (
@@ -15,6 +17,9 @@ export function RegisterView() {
       </CardHeader>
       <CardContent>
         <RegisterForm />
+        <AuthLink href={APP_ROUTES.login} message="Уже есть аккаунт?">
+          Войти
+        </AuthLink>
       </CardContent>
     </Card>
   );
