@@ -5,7 +5,7 @@ import { Button } from "@/shared/ui/components/button";
 import { cn } from "@/shared/ui/lib/utils";
 import { LogoutIcon } from "@/shared/ui/assets/icons/logout";
 
-export function LogoutView() {
+export function LogoutView({ className }: { className?: string }) {
   const { logout, globalError, isGlobalLoading, clearGlobalError } =
     useLogout();
 
@@ -27,6 +27,7 @@ export function LogoutView() {
       className={cn(
         globalError &&
           "border-destructive/50 text-destructive ring-2 ring-destructive/15",
+        className,
       )}
       aria-label="Выйти из аккаунта"
     >

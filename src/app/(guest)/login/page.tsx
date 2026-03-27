@@ -1,12 +1,12 @@
-import { RegisterView } from "@/modules/auth/presentation/register/register-view";
+import { LoginView } from "@/modules/auth/presentation/login/login-view";
 import { cn } from "@/shared/ui/lib/utils";
 
-export default function Page() {
+export default function LoginPage() {
   return (
     <main
       className={cn("flex", "min-h-screen", "items-center", "justify-center")}
     >
-      <RegisterView />
+      <LoginView />
     </main>
   );
 }
