@@ -1,35 +1,7 @@
 import type { SessionRepository } from "@/modules/auth/domain/session-repository";
 import type { UserRepository } from "@/modules/auth/domain/user-repository";
-import type { Session } from "@/modules/auth/domain/session";
-import type { User } from "@/modules/auth/domain/user";
-
-export enum SessionResolutionFailureReason {
-  SESSION_NOT_FOUND = "session_not_found",
-  SESSION_REVOKED = "session_revoked",
-  SESSION_EXPIRED = "session_expired",
-  USER_NOT_FOUND = "user_not_found",
-  USER_INACTIVE = "user_inactive",
-}
-
-export enum SessionResolutionResultKind {
-  AUTHENTICATED = "authenticated",
-  UNAUTHENTICATED = "unauthenticated",
-}
-
-export type SessionResolutionInput = {
-  sessionId: string;
-};
-
-export type SessionResolutionResult =
-  | {
-      kind: SessionResolutionResultKind.AUTHENTICATED;
-      user: User;
-      session: Session;
-    }
-  | {
-      kind: SessionResolutionResultKind.UNAUTHENTICATED;
-      reason: SessionResolutionFailureReason;
-    };
+import type { SessionResolutionInput, SessionResolutionResult } from "./types"
+import { SessionResolutionFailureReason, SessionResolutionResultKind } from "./constants"
 
 export class InspectSession {
   constructor(

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { RegisterUserResultKind } from "@/modules/auth/application/register-user";
+import { RegisterUserResultKind } from "@/modules/auth/application/register-user/constants";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 import { registerRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";

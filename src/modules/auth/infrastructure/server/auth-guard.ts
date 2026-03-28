@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
 import { createAuthServices } from "./auth-service-factory";
 import { APP_ROUTES } from "@/shared/config/routes";
-import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session";
+import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 
 // on Protected pages
 export async function protectedAuthGuard() {

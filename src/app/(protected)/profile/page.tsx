@@ -1,7 +1,5 @@
-import { protectedAuthGuard } from "@/modules/auth/infrastructure/server/auth-guard";
+import { BasePage } from "@/shared/ui/containers/base-page";
 
 export default async function ProfilePage() {
-  await protectedAuthGuard();
-
-  return <div>Profile Page</div>;
+  return <BasePage access="protected">Profile Page</BasePage>;
 }

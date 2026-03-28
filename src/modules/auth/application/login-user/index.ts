@@ -1,37 +1,9 @@
-import {
-  AuthenticateUser,
-  AuthenticateUserResultKind,
-} from "./authenticate-user";
+import type { AuthenticateUser } from "../authenticate-user";
+import { AuthenticateUserResultKind } from "../authenticate-user/constants";
 import type { SessionRepository } from "@/modules/auth/domain/session-repository";
-import type { Session } from "@/modules/auth/domain/session";
-import type { User } from "@/modules/auth/domain/user";
+import type { LoginUserInput, LoginUserResult } from "./types";
+import { LoginUserResultKind } from './constants'
 import SESSION_TTL_MS from "@/modules/auth/shared/session-ttl-ms";
-
-export type LoginUserInput = {
-  email: string;
-  password: string;
-  ipAddress: string | null;
-  userAgent: string | null;
-};
-
-export enum LoginUserResultKind {
-  LOGGED_IN = "logged_in",
-  INVALID_CREDENTIALS = "invalid_credentials",
-  INACTIVE_USER = "inactive_user",
-}
-
-export type LoginUserResult =
-  | {
-      kind: LoginUserResultKind.LOGGED_IN;
-      user: User;
-      session: Session;
-    }
-  | {
-      kind: LoginUserResultKind.INVALID_CREDENTIALS;
-    }
-  | {
-      kind: LoginUserResultKind.INACTIVE_USER;
-    };
 
 export class LoginUser {
   constructor(

@@ -1,15 +1,14 @@
-import { guestAuthGuard } from "@/modules/auth/infrastructure/server/auth-guard";
 import { LoginView } from "@/modules/auth/presentation/login/login-view";
+import { BasePage } from "@/shared/ui/containers/base-page";
 import { cn } from "@/shared/ui/lib/utils";
 
 export default async function LoginPage() {
-  await guestAuthGuard();
-
   return (
-    <main
+    <BasePage
+      access="guest"
       className={cn("flex", "min-h-screen", "items-center", "justify-center")}
     >
       <LoginView />
-    </main>
+    </BasePage>
   );
 }

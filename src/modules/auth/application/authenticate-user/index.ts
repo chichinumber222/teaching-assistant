@@ -1,30 +1,8 @@
 import type { PasswordHasher } from "@/modules/auth/domain/password-hasher";
 import type { UserRepository } from "@/modules/auth/domain/user-repository";
-import type { User } from "@/modules/auth/domain/user";
+import type { AuthenticateUserInput, AuthenticateUserResult } from "./types";
+import { AuthenticateUserResultKind } from "./constants";
 import dummyPasswordHash from "@/modules/auth/shared/dummy-password-hash";
-
-export type AuthenticateUserInput = {
-  email: string;
-  password: string;
-};
-
-export enum AuthenticateUserResultKind {
-  AUTHENTICATED = "authenticated",
-  INVALID_CREDENTIALS = "invalid_credentials",
-  INACTIVE_USER = "inactive_user",
-}
-
-export type AuthenticateUserResult =
-  | {
-      kind: AuthenticateUserResultKind.AUTHENTICATED;
-      user: User;
-    }
-  | {
-      kind: AuthenticateUserResultKind.INVALID_CREDENTIALS;
-    }
-  | {
-      kind: AuthenticateUserResultKind.INACTIVE_USER;
-    };
 
 export class AuthenticateUser {
   constructor(

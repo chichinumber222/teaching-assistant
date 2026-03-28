@@ -1,16 +1,6 @@
 import type { SessionRepository } from "@/modules/auth/domain/session-repository";
-
-export type LogoutUserInput = {
-  sessionId: string;
-};
-
-export enum LogoutUserResultKind {
-  LOGGED_OUT = "logged_out",
-}
-
-export type LogoutUserResult = {
-  kind: LogoutUserResultKind.LOGGED_OUT;
-};
+import type { LogoutUserInput, LogoutUserResult } from "./types";
+import { LogoutUserResultKind } from "./constants";
 
 export class LogoutUser {
   constructor(private readonly sessionRepository: SessionRepository) {}

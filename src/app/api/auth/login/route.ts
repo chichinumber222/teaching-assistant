@@ -6,7 +6,7 @@ import {
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 import { loginRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";
-import { LoginUserResultKind } from "@/modules/auth/application/login-user";
+import { LoginUserResultKind } from "@/modules/auth/application/login-user/constants";
 
 export async function POST(request: NextRequest) {
   try {
