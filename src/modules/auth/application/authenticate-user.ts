@@ -1,25 +1,30 @@
-import type { PasswordHasher } from "../domain/password-hasher";
-import type { UserRepository } from "../domain/user-repository";
-import type { User } from "../domain/user";
+import type { PasswordHasher } from "@/modules/auth/domain/password-hasher";
+import type { UserRepository } from "@/modules/auth/domain/user-repository";
+import type { User } from "@/modules/auth/domain/user";
+import dummyPasswordHash from "@/modules/auth/shared/dummy-password-hash";
 
 export type AuthenticateUserInput = {
   email: string;
   password: string;
 };
 
-export class InvalidCredentialsError extends Error {
-  constructor() {
-    super("Invalid credentials");
-    this.name = "InvalidCredentialsError";
-  }
+export enum AuthenticateUserResultKind {
+  AUTHENTICATED = "authenticated",
+  INVALID_CREDENTIALS = "invalid_credentials",
+  INACTIVE_USER = "inactive_user",
 }
 
-export class InactiveUserError extends Error {
-  constructor() {
-    super("User is inactive");
-    this.name = "InactiveUserError";
-  }
-}
+export type AuthenticateUserResult =
+  | {
+      kind: AuthenticateUserResultKind.AUTHENTICATED;
+      user: User;
+    }
+  | {
+      kind: AuthenticateUserResultKind.INVALID_CREDENTIALS;
+    }
+  | {
+      kind: AuthenticateUserResultKind.INACTIVE_USER;
+    };
 
 export class AuthenticateUser {
   constructor(
@@ -27,15 +32,14 @@ export class AuthenticateUser {
     private readonly passwordHasher: PasswordHasher,
   ) {}
 
-  execute(input: AuthenticateUserInput): User {
+  execute(input: AuthenticateUserInput): AuthenticateUserResult {
     const user = this.userRepository.findByEmail(input.email);
 
     if (!user) {
-      throw new InvalidCredentialsError();
-    }
-
-    if (!user.isActive) {
-      throw new InactiveUserError();
+      this.passwordHasher.compare(input.password, dummyPasswordHash); // Mitigate timing attacks
+      return {
+        kind: AuthenticateUserResultKind.INVALID_CREDENTIALS,
+      };
     }
 
     const isPasswordValid = this.passwordHasher.compare(
@@ -44,9 +48,20 @@ export class AuthenticateUser {
     );
 
     if (!isPasswordValid) {
-      throw new InvalidCredentialsError();
+      return {
+        kind: AuthenticateUserResultKind.INVALID_CREDENTIALS,
+      };
     }
 
-    return user;
+    if (!user.isActive) {
+      return {
+        kind: AuthenticateUserResultKind.INACTIVE_USER,
+      };
+    }
+
+    return {
+      kind: AuthenticateUserResultKind.AUTHENTICATED,
+      user,
+    };
   }
 }

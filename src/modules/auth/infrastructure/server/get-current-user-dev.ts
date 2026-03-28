@@ -1,4 +1,4 @@
-import { GetCurrentUser } from "@/modules/auth/application/get-current-user";
+import { GetCurrentUser } from "@/modules/auth/application/resolve-session";
 import { SqliteSessionRepository } from "./sqlite-session-repository";
 import { SqliteUserRepository } from "./sqlite-user-repository";
 

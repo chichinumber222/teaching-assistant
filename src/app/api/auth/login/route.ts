@@ -1,15 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import {
-  InactiveUserError,
-  InvalidCredentialsError,
-} from "@/modules/auth/application/authenticate-user";
-import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
 } from "@/modules/auth/shared/auth-cookie";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
 import { loginRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";
+import { LoginUserResultKind } from "@/modules/auth/application/login-user";
 
 export async function POST(request: NextRequest) {
   try {
@@ -35,9 +32,26 @@ export async function POST(request: NextRequest) {
       userAgent: request.headers.get("user-agent") || null,
     });
 
-    const response = NextResponse.json({
-      user: mapUserToPublicUserDto(result.user),
-    });
+    if (result.kind === LoginUserResultKind.INVALID_CREDENTIALS) {
+      return NextResponse.json(
+        { message: "Invalid email or password" },
+        { status: 401 },
+      );
+    }
+
+    if (result.kind === LoginUserResultKind.INACTIVE_USER) {
+      return NextResponse.json(
+        { message: "User account is inactive" },
+        { status: 403 },
+      );
+    }
+
+    const response = NextResponse.json(
+      {
+        user: mapUserToPublicUserDto(result.user),
+      },
+      { status: 200 },
+    );
 
     response.cookies.set(
       AUTH_SESSION_COOKIE_NAME,
@@ -46,15 +60,7 @@ export async function POST(request: NextRequest) {
     );
 
     return response;
-  } catch (error) {
-    if (error instanceof InvalidCredentialsError) {
-      return NextResponse.json({ message: error.message }, { status: 401 });
-    }
-
-    if (error instanceof InactiveUserError) {
-      return NextResponse.json({ message: error.message }, { status: 403 });
-    }
-
+  } catch {
     return NextResponse.json(
       { message: "Internal server error" },
       { status: 500 },

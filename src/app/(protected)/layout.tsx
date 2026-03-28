@@ -6,8 +6,6 @@ type Props = {
 };
 
 export default function ProtectedLayout({ children }: Props) {
-  
-
   return (
     <div>
       {children}
