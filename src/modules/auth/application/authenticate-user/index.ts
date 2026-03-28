@@ -3,6 +3,7 @@ import type { UserRepository } from "@/modules/auth/domain/user-repository";
 import type { AuthenticateUserInput, AuthenticateUserResult } from "./types";
 import { AuthenticateUserResultKind } from "./constants";
 import dummyPasswordHash from "@/modules/auth/shared/dummy-password-hash";
+import { prepareEmail } from "@/modules/auth/shared/prepare-email";
 
 export class AuthenticateUser {
   constructor(
@@ -11,7 +12,8 @@ export class AuthenticateUser {
   ) {}
 
   execute(input: AuthenticateUserInput): AuthenticateUserResult {
-    const user = this.userRepository.findByEmail(input.email);
+    const preparedEmail = prepareEmail(input.email);
+    const user = this.userRepository.findByEmail(preparedEmail);
 
     if (!user) {
       this.passwordHasher.compare(input.password, dummyPasswordHash); // Mitigate timing attacks

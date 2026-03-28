@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { LoginRequestDto } from "@/modules/auth/infrastructure/http/auth-api-client";
 import { authClient } from "@/modules/auth/infrastructure/http/auth-client";
-import { getLoginRedirectPath } from "./get-redirect-path";
+import { getStartPath } from "@/modules/auth/shared/redirects";
 
 type UseLoginResult = {
   login: (payload: LoginRequestDto) => Promise<boolean>;
@@ -31,7 +31,7 @@ export function useLogin(): UseLoginResult {
       const { user } = await authClient.login(payload);
 
       router.refresh();
-      router.push(getLoginRedirectPath(user.role));
+      router.push(getStartPath(user.role));
 
       return true;
     } catch (error) {

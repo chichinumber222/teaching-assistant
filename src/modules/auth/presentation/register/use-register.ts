@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { RegisterRequestDto } from "@/modules/auth/infrastructure/http/auth-api-client";
 import { authClient } from "@/modules/auth/infrastructure/http/auth-client";
-import { getRegisterRedirectPath } from "./get-redirect-path";
+import { getEntryPath } from "@/modules/auth/shared/redirects";
 
 type UseRegisterResult = {
   register: (payload: RegisterRequestDto) => Promise<boolean>;
@@ -31,7 +31,7 @@ export function useRegister(): UseRegisterResult {
       await authClient.register(payload);
 
       router.refresh();
-      router.push(getRegisterRedirectPath());
+      router.push(getEntryPath());
 
       return true;
     } catch (error) {

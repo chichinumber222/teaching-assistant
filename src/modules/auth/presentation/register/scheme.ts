@@ -8,10 +8,15 @@ export const registerSchema = z
       .min(1, { message: "Имя обязательно" })
       .max(100, { message: "Имя не может превышать 100 символов" }),
     email: z
-      .email({ message: "Некорректный формат email" })
+      .string()
       .trim()
-      .min(1, { message: "Email обязателен" })
-      .max(255, { message: "Email не может превышать 255 символов" }),
+      .toLowerCase()
+      .pipe(
+        z
+          .email({ message: "Некорректный формат email" })
+          .min(1, { message: "Email обязателен" })
+          .max(255, { message: "Email не может превышать 255 символов" }),
+      ),
     password: z
       .string()
       .trim()

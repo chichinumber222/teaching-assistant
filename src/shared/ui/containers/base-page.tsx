@@ -1,11 +1,13 @@
 import {
   guestAuthGuard,
-  protectedAuthGuard,
+  teacherRoleAuthGuard,
+  adminRoleAuthGuard,
 } from "@/modules/auth/infrastructure/server/auth-guard";
 import React from "react";
 
 export const accessGuards = {
-  protected: protectedAuthGuard,
+  admin: adminRoleAuthGuard,
+  teacher: teacherRoleAuthGuard,
   guest: guestAuthGuard,
 } as const;
 
@@ -14,7 +16,7 @@ export type RouteAccess = keyof typeof accessGuards;
 export type BasePageProps = {
   children: React.ReactNode;
   access: RouteAccess;
-  className?: string
+  className?: string;
 };
 
 export async function BasePage({ children, access, className }: BasePageProps) {
