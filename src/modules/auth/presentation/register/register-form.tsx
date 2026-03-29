@@ -7,6 +7,7 @@ import { Button } from "@/shared/ui/components/button";
 import { cn } from "@/shared/ui/lib/utils";
 import { registerSchema, RegisterData } from "./scheme";
 import { useRegister } from "./use-register";
+import { PasswordInput } from "@/shared/ui/components/password-input";
 
 export default function RegisterForm() {
   const { register, globalError, clearGlobalError } = useRegister();
@@ -100,9 +101,8 @@ export default function RegisterForm() {
         defaultValue=""
         render={({ field: { onChange, ...props } }) => (
           <div>
-            <Input
+            <PasswordInput
               {...props}
-              type="password"
               placeholder="Пароль"
               autoComplete="new-password"
               aria-invalid={!!errors.password}
@@ -130,9 +130,8 @@ export default function RegisterForm() {
         defaultValue=""
         render={({ field: { onChange, ...props } }) => (
           <div>
-            <Input
+            <PasswordInput
               {...props}
-              type="password"
               placeholder="Подтвердите пароль"
               autoComplete="new-password"
               aria-invalid={!!errors.confirmPassword}

@@ -7,6 +7,7 @@ import { Button } from "@/shared/ui/components/button";
 import { cn } from "@/shared/ui/lib/utils";
 import { loginSchema, LoginData } from "./scheme";
 import { useLogin } from "./use-login";
+import { PasswordInput } from "@/shared/ui/components/password-input"
 
 export default function LoginForm() {
   const { login, globalError, clearGlobalError } = useLogin();
@@ -66,9 +67,8 @@ export default function LoginForm() {
         defaultValue=""
         render={({ field: { onChange, ...props } }) => (
           <div>
-            <Input
+            <PasswordInput
               {...props}
-              type="password"
               placeholder="Пароль"
               autoComplete="new-password"
               aria-invalid={!!errors.password}
