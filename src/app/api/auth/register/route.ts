@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RegisterUserResultKind } from "@/modules/auth/application/register-user/constants";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
-import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/http/map-user-to-public-user-dto";
-import { registerRequestSchema } from "@/modules/auth/infrastructure/http/auth-schemes";
+import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
+import { registerRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
 import { UserRole } from "@/modules/auth/domain/user-role";
 
 export async function POST(request: NextRequest) {

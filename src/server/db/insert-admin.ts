@@ -4,23 +4,12 @@ import "@root/env-config";
 import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { RegisterUserResultKind } from "@/modules/auth/application/register-user/constants";
-
-const ADMIN_NAME = process.env.ADMIN_NAME;
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-
-function requireEnv(value: string | undefined, name: string): string {
-  if (!value) {
-    throw new Error(`${name} is required`);
-  }
-
-  return value;
-}
+import { requireValue } from "@/shared/lib/require-value";
 
 function insert() {
-  const name = requireEnv(ADMIN_NAME, "ADMIN_NAME");
-  const email = requireEnv(ADMIN_EMAIL, "ADMIN_EMAIL");
-  const password = requireEnv(ADMIN_PASSWORD, "ADMIN_PASSWORD");
+  const name = requireValue(process.env.ADMIN_NAME, "ADMIN_NAME");
+  const email = requireValue(process.env.ADMIN_EMAIL, "ADMIN_EMAIL");
+  const password = requireValue(process.env.ADMIN_PASSWORD, "ADMIN_PASSWORD");
 
   const { registerUser } = createAuthServices();
 

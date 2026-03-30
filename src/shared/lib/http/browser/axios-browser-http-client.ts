@@ -1,14 +1,20 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
-import { HttpClient, HttpRequestOptions } from "./http-client";
+import { HttpClient, HttpRequestOptions } from "../http-client";
 
-export class AxiosHttpClient implements HttpClient {
+type AxiosBrowserHttpClientConfig = {
+  baseURL: string;
+  baseHeaders?: Record<string, string>;
+};
+
+export class AxiosBrowserHttpClient implements HttpClient {
   private readonly client: AxiosInstance;
 
-  constructor() {
+  constructor(config: AxiosBrowserHttpClientConfig) {
     this.client = axios.create({
-      baseURL: "/",
+      baseURL: config.baseURL,
       headers: {
         "Content-Type": "application/json",
+        ...(config.baseHeaders || {}),
       },
     });
   }

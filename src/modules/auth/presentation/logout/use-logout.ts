@@ -1,4 +1,4 @@
-import { authClient } from "@/modules/auth/infrastructure/http/auth-client";
+import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 

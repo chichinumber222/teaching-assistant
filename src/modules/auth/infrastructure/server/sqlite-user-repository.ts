@@ -4,9 +4,9 @@ import { db } from "@/server/db/client";
 import type {
   CreateUserData,
   UserRepository,
-} from "../../domain/user-repository";
-import type { User } from "../../domain/user";
-import type { UserRole } from "../../domain/user-role";
+} from "@/modules/auth/domain/user-repository";
+import type { User } from "@/modules/auth/domain/user";
+import type { UserRole } from "@/modules/auth/domain/user-role";
 
 type UserRow = {
   id: string;
@@ -69,7 +69,16 @@ export class SqliteUserRepository implements UserRepository {
       `INSERT INTO users (id, name, email, password_hash, role, is_active, created_at, updated_at)
        VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
     );
-    statement.run(id, data.name, data.email, data.passwordHash, data.role, 1, now, now);
+    statement.run(
+      id,
+      data.name,
+      data.email,
+      data.passwordHash,
+      data.role,
+      1,
+      now,
+      now,
+    );
 
     return {
       id,

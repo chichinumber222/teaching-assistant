@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
-import { RegisterRequestDto } from "@/modules/auth/infrastructure/http/auth-api-client";
-import { authClient } from "@/modules/auth/infrastructure/http/auth-client";
+import { RegisterRequestDto } from "@/modules/auth/infrastructure/browser/auth-api-client";
+import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
 import { getEntryPath } from "@/modules/auth/shared/redirects";
 
 type UseRegisterResult = {
