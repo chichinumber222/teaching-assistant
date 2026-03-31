@@ -3,14 +3,14 @@ import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
 } from "@/modules/auth/shared/auth-cookie";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 
 export async function POST(request: NextRequest) {
   try {
     const sessionId = request.cookies.get(AUTH_SESSION_COOKIE_NAME)?.value;
 
     if (sessionId) {
-      const { logoutUser } = createAuthServices();
+      const { logoutUser } = buildAuthServices();
       logoutUser.execute({ sessionId });
     }
 

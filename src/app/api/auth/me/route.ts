@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
-import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response"
+import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response";
 
 export async function GET(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { resolveSession } = createAuthServices();
+    const { resolveSession } = buildAuthServices();
     const result = resolveSession.execute({ sessionId });
 
     if (result.kind === SessionResolutionResultKind.UNAUTHENTICATED) {

@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { RegisterUserResultKind } from "@/modules/auth/application/register-user/constants";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
 import { registerRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
 import { UserRole } from "@/modules/auth/domain/user-role";
@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { registerUser } = createAuthServices();
+    const { registerUser } = buildAuthServices();
 
     const result = registerUser.execute({
       name: parsedBody.data.name,

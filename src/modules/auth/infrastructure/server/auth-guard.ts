@@ -3,7 +3,7 @@ import "server-only";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
-import { createAuthServices } from "./auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { getStartPath, getEntryPath } from "@/modules/auth/shared/redirects";
@@ -16,7 +16,7 @@ async function requireAuth() {
     redirect(getEntryPath());
   }
 
-  const { inspectSession } = createAuthServices();
+  const { inspectSession } = buildAuthServices();
   const result = inspectSession.execute({ sessionId });
 
   if (result.kind === SessionResolutionResultKind.UNAUTHENTICATED) {
@@ -46,11 +46,10 @@ export async function guestAuthGuard() {
     return;
   }
 
-  const { inspectSession } = createAuthServices();
+  const { inspectSession } = buildAuthServices();
   const result = inspectSession.execute({ sessionId });
 
   if (result.kind === SessionResolutionResultKind.AUTHENTICATED) {
     redirect(getStartPath(result.user.role));
   }
 }
-

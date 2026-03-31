@@ -1,17 +1,21 @@
-import { SqliteUserRepository } from "@/modules/auth/infrastructure/server/sqlite-user-repository";
-import { SqliteLessonReportRepository } from "./sqlite-lesson-report-repository";
-import { SqliteStudentRepository } from "./sqlite-student-repository";
 import { CreateStudent } from "@/modules/students/application/create-student";
 import { GetOwnedStudent } from "@/modules/students/application/get-owned-student";
 import { CreateStudentLessonReport } from "@/modules/students/application/create-student-lesson-report";
 import { ListStudents } from "@/modules/students/application/list-students";
 import { ListStudentLessonReports } from "@/modules/students/application/list-student-lesson-reports";
 import { GetStudentContext } from "@/modules/students/application/get-student-context";
+import { StudentRepository } from "@/modules/students/domain/student-repository";
+import { LessonReportRepository } from "@/modules/students/domain/lesson-report-repository";
+import { UserRepository } from "@/modules/auth/domain/user-repository";
 
-export function createStudentsServices() {
-  const studentRepository = new SqliteStudentRepository();
-  const lessonReportRepository = new SqliteLessonReportRepository();
-  const userRepository = new SqliteUserRepository();
+export type StudentsDependencies = {
+  studentRepository: StudentRepository;
+  lessonReportRepository: LessonReportRepository;
+  userRepository: UserRepository;
+};
+
+export function createStudentsServices(deps: StudentsDependencies) {
+  const { studentRepository, lessonReportRepository, userRepository } = deps;
 
   const createStudent = new CreateStudent(userRepository, studentRepository);
   const getOwnedStudent = new GetOwnedStudent(

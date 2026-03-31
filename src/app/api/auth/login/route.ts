@@ -3,7 +3,7 @@ import {
   AUTH_SESSION_COOKIE_NAME,
   AUTH_SESSION_COOKIE_OPTIONS,
 } from "@/modules/auth/shared/auth-cookie";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
 import { loginRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
 import { LoginUserResultKind } from "@/modules/auth/application/login-user/constants";
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { loginUser } = createAuthServices();
+    const { loginUser } = buildAuthServices();
 
     const result = loginUser.execute({
       email: parsedBody.data.email,

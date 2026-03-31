@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createAiServices } from "@/modules/ai/infrastructure/server/ai-service-factory";
+import { buildAiServices } from "@/modules/ai/composition/build-ai-services"; 
 import { LanguageModelMessageRole } from "@/modules/ai/domain/language-model";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
-import { createAuthServices } from "@/modules/auth/infrastructure/server/auth-service-factory";
+import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response";
 
@@ -14,14 +14,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
-    const { resolveSession } = createAuthServices();
+    const { resolveSession } = buildAuthServices();
     const authResult = resolveSession.execute({ sessionId });
 
     if (authResult.kind === SessionResolutionResultKind.UNAUTHENTICATED) {
       return unauthorizedResponseWithCookieDeletion();
     }
 
-    const { generateText } = createAiServices();
+    const { generateText } = buildAiServices();
 
     const result = await generateText.execute({
       messages: [

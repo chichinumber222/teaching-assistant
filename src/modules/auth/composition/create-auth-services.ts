@@ -6,14 +6,19 @@ import {
 import { LoginUser } from "@/modules/auth/application/login-user";
 import { LogoutUser } from "@/modules/auth/application/logout-user";
 import { RegisterUser } from "@/modules/auth/application/register-user";
-import { ScryptPasswordHasher } from "./scrypt-password-hasher";
-import { SqliteSessionRepository } from "./sqlite-session-repository";
-import { SqliteUserRepository } from "./sqlite-user-repository";
+import { UserRepository } from "@/modules/auth/domain/user-repository";
+import { SessionRepository } from "@/modules/auth/domain/session-repository";
+import { PasswordHasher } from "@/modules/auth/domain/password-hasher";
 
-export function createAuthServices() {
-  const userRepository = new SqliteUserRepository();
-  const sessionRepository = new SqliteSessionRepository();
-  const passwordHasher = new ScryptPasswordHasher();
+export type AuthDependencies = {
+  userRepository: UserRepository;
+  sessionRepository: SessionRepository;
+  passwordHasher: PasswordHasher;
+};
+
+export function createAuthServices(deps: AuthDependencies) {
+  const { userRepository, sessionRepository, passwordHasher } = deps;
+
   const inspectSession = new InspectSession(sessionRepository, userRepository);
   const authenticateUser = new AuthenticateUser(userRepository, passwordHasher);
 
