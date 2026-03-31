@@ -1,0 +1,5 @@
+export enum CreateStudentResultKind {
+  CREATED = "CREATED",
+  TEACHER_NOT_FOUND = "TEACHER_NOT_FOUND",
+  USER_IS_NOT_TEACHER = "USER_IS_NOT_TEACHER",
+}
