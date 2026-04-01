@@ -4,11 +4,26 @@ import { buildAuthServices } from "@/modules/auth/composition/build-auth-service
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
 import { registerRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
 import { UserRole } from "@/modules/auth/domain/user-role";
+import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
+import { parseJson } from "@/app/api/_lib/shared/parse-json";
 
 export async function POST(request: NextRequest) {
   try {
-    const json = await request.json();
-    const parsedBody = registerRequestSchema.safeParse(json);
+    const originCheck = verifySameOrigin(request);
+
+    if (!originCheck.ok) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
+    const json = await parseJson(request);
+    if (!json.ok) {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
+
+    const parsedBody = registerRequestSchema.safeParse(json.data);
 
     if (!parsedBody.success) {
       return NextResponse.json(
@@ -18,7 +33,6 @@ export async function POST(request: NextRequest) {
     }
 
     const { registerUser } = buildAuthServices();
-
     const result = registerUser.execute({
       name: parsedBody.data.name,
       email: parsedBody.data.email,

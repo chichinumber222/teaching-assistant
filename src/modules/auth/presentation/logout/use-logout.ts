@@ -1,4 +1,5 @@
 import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
+import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -27,8 +28,26 @@ export function useLogout(): LogoutResult {
       router.refresh();
 
       return true;
-    } catch {
-      setGlobalError("Не удалось выйти из аккаунта. Попробуйте еще раз позже");
+    } catch (error) {
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+
+        if (status === 403) {
+          setGlobalError("Действие запрещено. Пожалуйста, попробуйте еще раз.");
+        } else if (status === 500) {
+          setGlobalError(
+            "Серверная ошибка. Пожалуйста, попробуйте еще раз позже.",
+          );
+        } else {
+          setGlobalError(
+            "Не удалось выйти из аккаунта. Попробуйте еще раз позже.",
+          );
+        }
+      } else {
+        setGlobalError(
+          "Не удалось выйти из аккаунта. Попробуйте еще раз позже.",
+        );
+      }
 
       return false;
     } finally {

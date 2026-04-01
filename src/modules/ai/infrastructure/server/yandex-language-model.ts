@@ -72,15 +72,14 @@ export class YandexLanguageModel implements LanguageModel {
       },
     });
 
-    const outputText = data.result?.alternatives?.[0]?.message?.text?.trim();
-    const totalTokens = data.result?.usage?.totalTokens;
-
-    const text = outputText + (totalTokens ? totalTokens : "");
+    const text = data.result?.alternatives?.[0]?.message?.text?.trim();
 
     if (!text) {
       throw new Error("YandexGPT response does not contain generated text");
     }
 
-    return { text };
+    const totalTokens = data.result?.usage?.totalTokens;
+
+    return { text, usage: { totalTokens } };
   }
 }

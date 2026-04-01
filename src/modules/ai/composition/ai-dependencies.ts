@@ -1,6 +1,8 @@
 import { AxiosServerHttpClient } from "@/shared/lib/http/server/axios-server-http-client";
 import { requireValue } from "@/shared/lib/validation/require-value";
 import { YandexLanguageModel } from "@/modules/ai/infrastructure/server/yandex-language-model";
+import { ConsoleLogger } from "@/shared/lib/logger/console-logger";
+import { LoggingLanguageModel } from "@/modules/ai/infrastructure/server/logging-language-model";
 
 export function getAiDependencies() {
   const apiKey = requireValue(process.env.YANDEX_API_KEY, "YANDEX_API_KEY");
@@ -14,11 +16,16 @@ export function getAiDependencies() {
     baseURL: "https://ai.api.cloud.yandex.net",
   });
 
-  const languageModel = new YandexLanguageModel(yandexHttpClient, {
+  const yandexLanguageModel = new YandexLanguageModel(yandexHttpClient, {
     apiKey,
     folderId,
     modelUri,
   });
 
-  return { languageModel };
+  const loggingLanguageModel = new LoggingLanguageModel(
+    yandexLanguageModel,
+    new ConsoleLogger(),
+  );
+
+  return { languageModel: loggingLanguageModel };
 }

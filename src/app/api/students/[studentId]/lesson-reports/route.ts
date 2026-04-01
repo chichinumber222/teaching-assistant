@@ -7,12 +7,19 @@ import { parseJson } from "@/app/api/_lib/shared/parse-json";
 import { buildStudentsServices } from "@/modules/students/composition/build-students-services";
 import { createStudentLessonReportRequestSchema } from "@/modules/students/infrastructure/server/students-schemes";
 import { CreateStudentLessonReportResultKind } from "@/modules/students/application/create-student-lesson-report/constants";
+import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
 
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ studentId: string }> },
 ) {
   try {
+    const originCheck = verifySameOrigin(request);
+
+    if (!originCheck.ok) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
     const sessionId = request.cookies.get(AUTH_SESSION_COOKIE_NAME)?.value;
 
     if (!sessionId) {
@@ -94,3 +101,4 @@ export async function POST(
     );
   }
 }
+

@@ -42,6 +42,8 @@ export function useRegister(): UseRegisterResult {
           setGlobalError("Пользователь с таким email уже существует");
         } else if (status === 400) {
           setGlobalError("Проверьте введенные данные");
+        } else if (status === 403) {
+          setGlobalError("Регистрация временно недоступна");
         } else {
           setGlobalError(
             "Не удалось создать аккаунт. Попробуйте еще раз позже",

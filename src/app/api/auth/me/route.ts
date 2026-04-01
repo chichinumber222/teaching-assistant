@@ -4,9 +4,16 @@ import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
 import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
 import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response";
+import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
 
 export async function GET(request: NextRequest) {
   try {
+    const originCheck = verifySameOrigin(request);
+
+    if (!originCheck.ok) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
     const sessionId = request.cookies.get(AUTH_SESSION_COOKIE_NAME)?.value;
 
     if (!sessionId) {

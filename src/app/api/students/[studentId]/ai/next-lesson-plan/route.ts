@@ -1,15 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
-import { CreateStudentResultKind } from "@/modules/students/application/create-student/constants";
-import { buildStudentsServices } from "@/modules/students/composition/build-students-services";
-import { createStudentRequestSchema } from "@/modules/students/infrastructure/server/students-schemes";
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
 import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response";
-import { parseJson } from "@/app/api/_lib/shared/parse-json";
+import { buildAiServices } from "@/modules/ai/composition/build-ai-services";
+import { GenerateNextLessonPlanResultKind } from "@/modules/ai/application/generate-next-lesson-plan/constants";
 import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
+import { MemoryRateLimiter } from "@/app/api/_lib/shared/rate-limiter";
 
-export async function POST(request: NextRequest) {
+const rateLimiter = new MemoryRateLimiter();
+
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ studentId: string }> },
+) {
   try {
     const originCheck = verifySameOrigin(request);
 
@@ -30,44 +34,48 @@ export async function POST(request: NextRequest) {
       return unauthorizedResponseWithCookieDeletion();
     }
 
-    const json = await parseJson(request);
-    if (!json.ok) {
-      return NextResponse.json(
-        { message: "Invalid request body" },
-        { status: 400 },
-      );
-    }
-
-    const parsedBody = createStudentRequestSchema.safeParse(json.data);
-    if (!parsedBody.success) {
-      return NextResponse.json(
-        { message: "Invalid request body" },
-        { status: 400 },
-      );
-    }
-
-    const { createStudent } = buildStudentsServices();
-    const result = createStudent.execute({
-      teacherUserId: authResult.user.id,
-      fullName: parsedBody.data.fullName,
-      subject: parsedBody.data.subject,
-      level: parsedBody.data.level,
-      goals: parsedBody.data.goals,
-      notes: parsedBody.data.notes,
+    const rateLimitResult = rateLimiter.check({
+      key: `ai:next-lesson-plan:${authResult.user.id}`,
+      limit: 5,
+      windowMs: 60 * 1000,
     });
 
-    if (result.kind === CreateStudentResultKind.TEACHER_NOT_FOUND) {
+    if (!rateLimitResult.ok) {
+      return NextResponse.json(
+        {
+          message: `Rate limit exceeded. Try again in ${rateLimitResult.retryAfterSeconds} seconds.`,
+        },
+        { status: 429 },
+      );
+    }
+
+    const { studentId } = await params;
+
+    const { generateNextLessonPlan } = buildAiServices();
+    const result = await generateNextLessonPlan.execute({
+      teacherUserId: authResult.user.id,
+      studentId,
+    });
+
+    if (result.kind === GenerateNextLessonPlanResultKind.TEACHER_NOT_FOUND) {
       return NextResponse.json(
         { message: "Teacher not found" },
         { status: 404 },
       );
     }
 
-    if (result.kind === CreateStudentResultKind.USER_IS_NOT_TEACHER) {
+    if (result.kind === GenerateNextLessonPlanResultKind.USER_IS_NOT_TEACHER) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
-    return NextResponse.json({ student: result.student }, { status: 201 });
+    if (result.kind === GenerateNextLessonPlanResultKind.STUDENT_NOT_FOUND) {
+      return NextResponse.json(
+        { message: "Student not found" },
+        { status: 404 },
+      );
+    }
+
+    return NextResponse.json({ text: result.text }, { status: 200 });
   } catch {
     return NextResponse.json(
       { message: "Internal server error" },

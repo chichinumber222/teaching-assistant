@@ -7,11 +7,27 @@ import { buildAuthServices } from "@/modules/auth/composition/build-auth-service
 import { mapUserToPublicUserDto } from "@/modules/auth/infrastructure/server/map-user-to-public-user-dto";
 import { loginRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
 import { LoginUserResultKind } from "@/modules/auth/application/login-user/constants";
+import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
+import { parseJson } from "@/app/api/_lib/shared/parse-json";
 
 export async function POST(request: NextRequest) {
   try {
-    const json = await request.json();
-    const parsedBody = loginRequestSchema.safeParse(json);
+    const originCheck = verifySameOrigin(request);
+
+    if (!originCheck.ok) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+
+    const json = await parseJson(request);
+
+    if (!json.ok) {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
+
+    const parsedBody = loginRequestSchema.safeParse(json.data);
 
     if (!parsedBody.success) {
       return NextResponse.json(

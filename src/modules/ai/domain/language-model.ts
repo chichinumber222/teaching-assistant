@@ -17,6 +17,9 @@ export type LanguageModelTextInput = {
 
 export type LanguageModelResponse = {
   text: string;
+  usage:{
+    totalTokens?: string;
+  }
 };
 
 export interface LanguageModel {
