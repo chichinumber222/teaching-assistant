@@ -38,17 +38,15 @@ db.exec(`
     id TEXT PRIMARY KEY,
     student_id TEXT NOT NULL,
     lesson_at TEXT NOT NULL,
-    topic TEXT NOT NULL,
+    lesson_plan TEXT NOT NULL,
+    uncompleted_planned_work TEXT,
     understanding_level TEXT NOT NULL
       CHECK (understanding_level IN ('low', 'medium', 'high')),
-    participation_level TEXT NOT NULL
-      CHECK (participation_level IN ('low', 'medium', 'high')),
     what_went_well TEXT,
     difficulties TEXT,
-    homework_assigned TEXT,
     homework_status TEXT NOT NULL
       CHECK (homework_status IN ('not_assigned', 'not_checked', 'done', 'partly_done', 'not_done')),
-    next_lesson_focus TEXT,
+    homework_comment TEXT,
     teacher_comment TEXT,
     created_at TEXT NOT NULL,
     updated_at TEXT NOT NULL,

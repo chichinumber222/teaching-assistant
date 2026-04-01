@@ -7,21 +7,19 @@ import type {
   LessonReportRepository,
 } from "@/modules/students/domain/lesson-report-repository";
 import type { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import type { ParticipationLevel } from "@/modules/students/domain/participation-level";
 import type { HomeworkStatus } from "@/modules/students/domain/homework-status";
 
 type LessonReportRow = {
   id: string;
   student_id: string;
   lesson_at: string;
-  topic: string;
+  lesson_plan: string;
+  uncompleted_planned_work: string | null;
   understanding_level: UnderstandingLevel;
-  participation_level: ParticipationLevel;
   what_went_well: string | null;
   difficulties: string | null;
-  homework_assigned: string | null;
   homework_status: HomeworkStatus;
-  next_lesson_focus: string | null;
+  homework_comment: string | null;
   teacher_comment: string | null;
   created_at: string;
   updated_at: string;
@@ -32,14 +30,13 @@ function mapRowToLessonReport(row: LessonReportRow): LessonReport {
     id: row.id,
     studentId: row.student_id,
     lessonAt: row.lesson_at,
-    topic: row.topic,
+    lessonPlan: row.lesson_plan,
+    uncompletedPlannedWork: row.uncompleted_planned_work,
     understandingLevel: row.understanding_level,
-    participationLevel: row.participation_level,
     whatWentWell: row.what_went_well,
     difficulties: row.difficulties,
-    homeworkAssigned: row.homework_assigned,
     homeworkStatus: row.homework_status,
-    nextLessonFocus: row.next_lesson_focus,
+    homeworkComment: row.homework_comment,
     teacherComment: row.teacher_comment,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -54,14 +51,13 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
           id,
           student_id,
           lesson_at,
-          topic,
+          lesson_plan,
+          uncompleted_planned_work,
           understanding_level,
-          participation_level,
           what_went_well,
           difficulties,
-          homework_assigned,
           homework_status,
-          next_lesson_focus,
+          homework_comment,
           teacher_comment,
           created_at,
           updated_at
@@ -76,6 +72,35 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
     return rows.map(mapRowToLessonReport);
   }
 
+  findManyRecentByStudentId(studentId: string, limit: number): LessonReport[] {
+  const statement = db.prepare<[string, number], LessonReportRow>(
+    `
+      SELECT
+        id,
+        student_id,
+        lesson_at,
+        lesson_plan,
+        uncompleted_planned_work,
+        understanding_level,
+        what_went_well,
+        difficulties,
+        homework_status,
+        homework_comment,
+        teacher_comment,
+        created_at,
+        updated_at
+      FROM lesson_reports
+      WHERE student_id = ?
+      ORDER BY lesson_at DESC, created_at DESC
+      LIMIT ?
+    `,
+  );
+
+  const rows = statement.all(studentId, limit);
+
+  return rows.map(mapRowToLessonReport);
+}
+
   create(data: CreateLessonReportData): LessonReport {
     const id = randomUUID();
     const now = new Date().toISOString();
@@ -86,9 +111,8 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
         string,
         string,
         string,
-        UnderstandingLevel,
-        ParticipationLevel,
         string | null,
+        UnderstandingLevel,
         string | null,
         string | null,
         HomeworkStatus,
@@ -103,19 +127,18 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
           id,
           student_id,
           lesson_at,
-          topic,
+          lesson_plan,
+          uncompleted_planned_work,
           understanding_level,
-          participation_level,
           what_went_well,
           difficulties,
-          homework_assigned,
           homework_status,
-          next_lesson_focus,
+          homework_comment,
           teacher_comment,
           created_at,
           updated_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
     );
 
@@ -123,14 +146,13 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       id,
       data.studentId,
       data.lessonAt,
-      data.topic,
+      data.lessonPlan,
+      data.uncompletedPlannedWork,
       data.understandingLevel,
-      data.participationLevel,
       data.whatWentWell,
       data.difficulties,
-      data.homeworkAssigned,
       data.homeworkStatus,
-      data.nextLessonFocus,
+      data.homeworkComment,
       data.teacherComment,
       now,
       now,
@@ -140,14 +162,13 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       id,
       studentId: data.studentId,
       lessonAt: data.lessonAt,
-      topic: data.topic,
+      lessonPlan: data.lessonPlan,
+      uncompletedPlannedWork: data.uncompletedPlannedWork,
       understandingLevel: data.understandingLevel,
-      participationLevel: data.participationLevel,
       whatWentWell: data.whatWentWell,
       difficulties: data.difficulties,
-      homeworkAssigned: data.homeworkAssigned,
       homeworkStatus: data.homeworkStatus,
-      nextLessonFocus: data.nextLessonFocus,
+      homeworkComment: data.homeworkComment,
       teacherComment: data.teacherComment,
       createdAt: now,
       updatedAt: now,

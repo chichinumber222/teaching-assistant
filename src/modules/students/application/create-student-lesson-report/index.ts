@@ -47,14 +47,13 @@ export class CreateStudentLessonReport {
     const lessonReport = this.lessonReportRepository.create({
       studentId: input.studentId,
       lessonAt: input.lessonAt,
-      topic: input.topic,
+      lessonPlan: input.lessonPlan,
+      uncompletedPlannedWork: input.uncompletedPlannedWork,
       understandingLevel: input.understandingLevel,
-      participationLevel: input.participationLevel,
       whatWentWell: input.whatWentWell,
       difficulties: input.difficulties,
-      homeworkAssigned: input.homeworkAssigned,
       homeworkStatus: input.homeworkStatus,
-      nextLessonFocus: input.nextLessonFocus,
+      homeworkComment: input.homeworkComment,
       teacherComment: input.teacherComment,
     });
 

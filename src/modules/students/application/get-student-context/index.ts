@@ -2,10 +2,7 @@ import type { UserRepository } from "@/modules/auth/domain/user-repository";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import type { StudentRepository } from "@/modules/students/domain/student-repository";
 import type { LessonReportRepository } from "@/modules/students/domain/lesson-report-repository";
-import type {
-  GetStudentContextInput,
-  GetStudentContextResult,
-} from "./types";
+import type { GetStudentContextInput, GetStudentContextResult } from "./types";
 import { GetStudentContextResultKind } from "./constants";
 
 export class GetStudentContext {
@@ -44,8 +41,9 @@ export class GetStudentContext {
       };
     }
 
-    const lessonReports = this.lessonReportRepository.findManyByStudentId(
+    const lessonReports = this.lessonReportRepository.findManyRecentByStudentId(
       input.studentId,
+      input.lessonReportsLimit,
     );
 
     return {

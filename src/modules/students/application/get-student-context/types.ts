@@ -10,6 +10,7 @@ export type StudentContext = {
 export type GetStudentContextInput = {
   teacherUserId: string;
   studentId: string;
+  lessonReportsLimit: number;
 };
 
 export type GetStudentContextResult =
