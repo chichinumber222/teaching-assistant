@@ -7,9 +7,9 @@ type Props = {
 
 export default function ProtectedLayout({ children }: Props) {
   return (
-    <div>
+    <main className="flex flex-col gap-4 p-4">
+      <LogoutView className="self-end" />
       {children}
-      <LogoutView className="absolute top-4 right-4" />
-    </div>
+    </main>
   );
 }

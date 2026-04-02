@@ -6,5 +6,5 @@ export type BasePageProps = {
 };
 
 export async function BasePage({ children, className }: BasePageProps) {
-  return <main className={className}>{children}</main>;
+  return <div className={className}>{children}</div>;
 }

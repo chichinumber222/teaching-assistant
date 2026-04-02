@@ -1,3 +1,4 @@
+import { cn } from "@/shared/ui/lib/utils";
 import React from "react";
 
 type Props = {
@@ -5,5 +6,11 @@ type Props = {
 };
 
 export default function GuestLayout({ children }: Props) {
-  return children;
+  return (
+    <main
+      className={cn("flex", "min-h-screen", "items-center", "justify-center")}
+    >
+      {children}
+    </main>
+  );
 }
