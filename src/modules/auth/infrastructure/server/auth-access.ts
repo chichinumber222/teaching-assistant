@@ -7,49 +7,44 @@ import { buildAuthServices } from "@/modules/auth/composition/build-auth-service
 import { SessionResolutionResultKind } from "@/modules/auth/application/resolve-session/constants";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { getStartPath, getEntryPath } from "@/modules/auth/shared/redirects";
+import { User } from "@/modules/auth/domain/user";
 
-async function requireAuth() {
+async function getUser(): Promise<User | null> {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(AUTH_SESSION_COOKIE_NAME)?.value;
 
   if (!sessionId) {
-    redirect(getEntryPath());
+    return null;
   }
 
   const { inspectSession } = buildAuthServices();
   const result = inspectSession.execute({ sessionId });
 
   if (result.kind === SessionResolutionResultKind.UNAUTHENTICATED) {
-    redirect(getEntryPath());
+    return null;
   }
 
   return result.user;
 }
 
-export async function teacherRoleAuthGuard() {
-  await requireAuth();
-}
+export async function requireRole(requiredRole: UserRole): Promise<User> {
+  const user = await getUser();
 
-export async function adminRoleAuthGuard() {
-  const user = await requireAuth();
+  if (!user) {
+    redirect(getEntryPath());
+  }
 
-  if (user.role !== UserRole.Admin) {
+  if (user.role !== requiredRole) {
     redirect(getStartPath(user.role));
   }
+
+  return user;
 }
 
-export async function guestAuthGuard() {
-  const cookieStore = await cookies();
-  const sessionId = cookieStore.get(AUTH_SESSION_COOKIE_NAME)?.value;
+export async function requireGuest(): Promise<void> {
+  const user = await getUser();
 
-  if (!sessionId) {
-    return;
-  }
-
-  const { inspectSession } = buildAuthServices();
-  const result = inspectSession.execute({ sessionId });
-
-  if (result.kind === SessionResolutionResultKind.AUTHENTICATED) {
-    redirect(getStartPath(result.user.role));
+  if (user) {
+    redirect(getStartPath(user.role));
   }
 }

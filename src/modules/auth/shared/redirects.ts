@@ -7,10 +7,10 @@ export function getStartPath(role: UserRole): string {
       return APP_ROUTES.admin;
 
     case UserRole.Teacher:
-      return APP_ROUTES.home;
+      return APP_ROUTES.students;
 
     default:
-      return APP_ROUTES.home;
+      return APP_ROUTES.students;
   }
 }
 
