@@ -33,7 +33,7 @@ type StudentsListProps = {
 
 export function StudentsList({ students }: StudentsListProps) {
   return (
-    <Card size="sm" className="w-full shadow-sm">
+    <Card size="sm" className="w-full shadow-sm bg-card">
       <CardHeader>
         <CardTitle>Ученики</CardTitle>
         <CardDescription>Список всех ваших учеников.</CardDescription>
@@ -41,56 +41,94 @@ export function StudentsList({ students }: StudentsListProps) {
 
       <CardContent>
         {students.length === 0 ? (
-          <div className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground">
+          <div className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground bg-table">
             У вас пока нет учеников.
           </div>
         ) : (
           <>
-            <ItemGroup className="md:hidden">
+            <ItemGroup className="overflow-hidden rounded-lg border border-border bg-table md:hidden">
               {students.map((student) => (
-                <Item key={student.id} size="sm">
-                  <ItemContent className="min-w-0">
-                    <ItemTitle className="truncate">
-                      {student.fullName}
-                    </ItemTitle>
-                    <ItemDescription className="truncate">
-                      {student.subject}
-                      {student.level ? ` · ${student.level}` : ""}
-                    </ItemDescription>
-                  </ItemContent>
+                <Item
+                  key={student.id}
+                  size="sm"
+                  className="rounded-none border-b border-border bg-transparent pr-2 last:border-b-0 first:border-t-0"
+                >
+                  <Link
+                    href={`${APP_ROUTES.students}/${encodeURIComponent(student.id)}`}
+                    className="min-w-0 flex-1 px-4 py-3 transition-colors hover:bg-muted/20"
+                  >
+                    <ItemContent className="min-w-0 text-sm">
+                      <ItemTitle className="[overflow-wrap:anywhere] line-clamp-2">
+                        {student.fullName}
+                      </ItemTitle>
+                      <ItemDescription className="mt-0.5 text-muted-foreground [overflow-wrap:anywhere] line-clamp-2">
+                        {student.subject}
+                        {student.level ? ` · ${student.level}` : ""}
+                      </ItemDescription>
+                    </ItemContent>
+                  </Link>
                   <ItemActions className="shrink-0">
-                    <Button asChild variant="ghost" size="sm">
-                      <Link href={`${APP_ROUTES.students}/${student.id}`}>
-                        Открыть
-                      </Link>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      className="text-muted-foreground hover:bg-muted hover:text-foreground"
+                      aria-label={`Действия для ${student.fullName}`}
+                    >
+                      <span aria-hidden="true">⋮</span>
                     </Button>
                   </ItemActions>
                 </Item>
               ))}
             </ItemGroup>
 
-            <Table className="hidden md:table">
-              <TableHeader className="bg-primary/8">
-                <TableRow>
+            <Table
+              className="table-fixed"
+              containerClassName="hidden rounded-lg border border-border bg-table md:block"
+            >
+              <TableHeader className="bg-muted/30">
+                <TableRow className="hover:bg-transparent">
                   <TableHead>Ученик</TableHead>
                   <TableHead>Предмет</TableHead>
                   <TableHead>Уровень</TableHead>
-                  <TableHead className="text-right">Действие</TableHead>
+                  <TableHead className="w-40">
+                    <span className="sr-only">Переход</span>
+                  </TableHead>
+                  <TableHead className="w-12 pr-2 text-right">
+                    <span className="sr-only">Меню</span>
+                  </TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {students.map((student) => (
-                  <TableRow key={student.id}>
-                    <TableCell className="font-medium">
-                      {student.fullName}
+                  <TableRow key={student.id} className="hover:bg-muted/20">
+                    <TableCell className="font-medium truncate">
+                      <div className="truncate">{student.fullName}</div>
                     </TableCell>
-                    <TableCell>{student.subject}</TableCell>
-                    <TableCell>{student.level ?? "—"}</TableCell>
-                    <TableCell className="text-right">
-                      <Button asChild variant="ghost" size="sm">
-                        <Link href={`${APP_ROUTES.students}/${student.id}`}>
-                          Открыть
+                    <TableCell>
+                      <div className="truncate">{student.subject}</div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="truncate">{student.level ?? "—"}</div>
+                    </TableCell>
+                    <TableCell>
+                      <Button asChild variant="link" size="sm">
+                        <Link
+                          href={`${APP_ROUTES.students}/${encodeURIComponent(student.id)}`}
+                        >
+                          Перейти
                         </Link>
+                      </Button>
+                    </TableCell>
+                    <TableCell className="pr-2 text-right">
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon-sm"
+                        className="text-muted-foreground hover:bg-muted hover:text-foreground"
+                        aria-label={`Действия для ${student.fullName}`}
+                      >
+                        <span aria-hidden="true">⋮</span>
                       </Button>
                     </TableCell>
                   </TableRow>

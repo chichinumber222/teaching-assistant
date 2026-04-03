@@ -16,7 +16,7 @@ const PasswordInput = ({
     <div className="w-full max-w-sm relative">
       <Input
         {...props}
-        className={cn(className, "bg-background")}
+        className={cn(className)}
         type={showPassword ? "text" : "password"}
       />
       <Button

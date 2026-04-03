@@ -4,9 +4,9 @@ export const mockStudents: Student[] = [
   {
     id: "student_1",
     teacherUserId: "teacher_1",
-    fullName: "Анна Смирнова",
+    fullName: "Анна Сергеевна Смирнова",
     subject: "Математика",
-    level: "7 класс",
+    level: "8 класс",
     goals: "Подтянуть алгебру и подготовиться к контрольным работам.",
     notes: "Сильна в геометрии, но путается в уравнениях.",
     createdAt: "2026-04-02T09:00:00.000Z",
