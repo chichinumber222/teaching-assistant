@@ -5,7 +5,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/components/input";
 import { Button } from "@/shared/ui/components/button";
 import { cn } from "@/shared/ui/lib/utils";
-import { registerSchema, RegisterData } from "./scheme";
+import { registerSchema } from "./scheme";
+import type { RegisterData } from "./scheme";
 import { useRegister } from "./use-register";
 import { PasswordInput } from "@/shared/ui/components/password-input";
 

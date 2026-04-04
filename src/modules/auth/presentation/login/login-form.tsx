@@ -5,9 +5,10 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/shared/ui/components/input";
 import { Button } from "@/shared/ui/components/button";
 import { cn } from "@/shared/ui/lib/utils";
-import { loginSchema, LoginData } from "./scheme";
+import { loginSchema } from "./scheme";
+import type { LoginData } from "./scheme";
 import { useLogin } from "./use-login";
-import { PasswordInput } from "@/shared/ui/components/password-input"
+import { PasswordInput } from "@/shared/ui/components/password-input";
 
 export default function LoginForm() {
   const { login, globalError, clearGlobalError } = useLogin();

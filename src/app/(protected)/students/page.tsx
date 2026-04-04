@@ -1,9 +1,9 @@
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
 import { getStudentsPageData } from "@/modules/students/infrastructure/server/get-students-page-data";
-import { StudentsList } from "@/modules/students/presentation/students-list";
+import { StudentsList } from "@/modules/students/presentation/list-students/students-list";
 import { BasePage } from "@/shared/ui/containers/base-page";
-import { Fallback } from "@/modules/students/presentation/fallback";
+import { Fallback } from "@/modules/students/presentation/list-students/fallback";
 
 export default async function StudentsPage() {
   const teacher = await requireRole(UserRole.Teacher);

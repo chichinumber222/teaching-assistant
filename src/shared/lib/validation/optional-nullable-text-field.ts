@@ -1,15 +1,16 @@
 import z from "zod";
 
 export const optionalNullableTextField = (max: number) =>
-  z.preprocess((value) => {
-    if (value == null) {
-      return null;
-    }
+  z
+    .string("Поле должно быть строкой")
+    .nullable()
+    .optional()
+    .transform((value) => {
+      if (value == null) return null;
 
-    if (typeof value !== "string") {
-      return value;
-    }
-
-    const trimmed = value.trim();
-    return trimmed === "" ? null : trimmed;
-  }, z.string().max(max).nullable());
+      const trimmed = value.trim();
+      return trimmed === "" ? null : trimmed;
+    })
+    .pipe(
+      z.string().max(max, `Максимальная длина — ${max} символов`).nullable(),
+    );
