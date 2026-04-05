@@ -1,4 +1,4 @@
-import type { StudentContext } from "../types";
+import type { StudentDossier } from "../types";
 import {
   formatHomeworkStatus,
   formatOptionalText,
@@ -6,7 +6,7 @@ import {
 } from "@/modules/students/shared/format";
 
 function buildReportsTextSnapshot(
-  reports: StudentContext["lessonReports"],
+  reports: StudentDossier["lessonReports"],
 ): string {
   if (reports.length === 0) {
     return "Отчетов по занятиям пока нет.";
@@ -30,7 +30,7 @@ function buildReportsTextSnapshot(
 }
 
 function buildStudentProfileTextSnapshot(
-  student: StudentContext["student"],
+  student: StudentDossier["student"],
 ): string {
   return [
     "Профиль ученика:",
@@ -45,7 +45,7 @@ function buildStudentProfileTextSnapshot(
 export function buildTextSnapshot({
   student,
   lessonReports,
-}: StudentContext): string {
+}: StudentDossier): string {
   return [
     buildStudentProfileTextSnapshot(student),
     "",

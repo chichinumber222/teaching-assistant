@@ -1,20 +1,20 @@
 import { GenerateText } from "@/modules/ai/application/generate-text";
 import type { LanguageModel } from "@/modules/ai/domain/language-model";
 import { GenerateNextLessonPlan } from "@/modules/ai/application/generate-next-lesson-plan";
-import type { GetStudentContext } from "@/modules/students/application/get-student-context";
+import type { GetStudentDossier } from "@/modules/students/application/get-student-dossier";
 
 export type AiServiceDependencies = {
   languageModel: LanguageModel;
-  getStudentContext: GetStudentContext;
+  getStudentDossier: GetStudentDossier;
 };
 
 export function createAiServices(deps: AiServiceDependencies) {
-  const { languageModel, getStudentContext } = deps;
+  const { languageModel, getStudentDossier } = deps;
 
   return {
     generateText: new GenerateText(languageModel),
     generateNextLessonPlan: new GenerateNextLessonPlan(
-      getStudentContext,
+      getStudentDossier,
       languageModel,
     ),
   };

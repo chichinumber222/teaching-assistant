@@ -23,10 +23,10 @@ export default async function StudentsIdPage({ params }: StudentsIdPageProps) {
     <BasePage>
       {pageData.ok ? (
         <StudentView
-          student={pageData.context.student}
+          student={pageData.data.student}
           lessonReports={
-            pageData.context.lessonReports?.length
-              ? pageData.context.lessonReports
+            pageData.data.lessonReports?.length
+              ? pageData.data.lessonReports
               : lessonReportMocks
           }
         />

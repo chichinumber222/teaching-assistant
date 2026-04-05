@@ -2,28 +2,28 @@ import type { UserRepository } from "@/modules/auth/domain/user-repository";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import type { StudentRepository } from "@/modules/students/domain/student-repository";
 import type { LessonReportRepository } from "@/modules/students/domain/lesson-report-repository";
-import type { GetStudentContextInput, GetStudentContextResult } from "./types";
-import { GetStudentContextResultKind } from "./constants";
+import type { GetStudentDossierInput, GetStudentDossierResult } from "./types";
+import { GetStudentDossierResultKind } from "./constants";
 
-export class GetStudentContext {
+export class GetStudentDossier {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly studentRepository: StudentRepository,
     private readonly lessonReportRepository: LessonReportRepository,
   ) {}
 
-  execute(input: GetStudentContextInput): GetStudentContextResult {
+  execute(input: GetStudentDossierInput): GetStudentDossierResult {
     const teacher = this.userRepository.findById(input.teacherUserId);
 
     if (!teacher) {
       return {
-        kind: GetStudentContextResultKind.TEACHER_NOT_FOUND,
+        kind: GetStudentDossierResultKind.TEACHER_NOT_FOUND,
       };
     }
 
     if (teacher.role !== UserRole.Teacher) {
       return {
-        kind: GetStudentContextResultKind.USER_IS_NOT_TEACHER,
+        kind: GetStudentDossierResultKind.USER_IS_NOT_TEACHER,
       };
     }
 
@@ -31,13 +31,13 @@ export class GetStudentContext {
 
     if (!student) {
       return {
-        kind: GetStudentContextResultKind.STUDENT_NOT_FOUND,
+        kind: GetStudentDossierResultKind.STUDENT_NOT_FOUND,
       };
     }
 
     if (student.teacherUserId !== input.teacherUserId) {
       return {
-        kind: GetStudentContextResultKind.STUDENT_NOT_FOUND,
+        kind: GetStudentDossierResultKind.STUDENT_NOT_FOUND,
       };
     }
 
@@ -47,8 +47,8 @@ export class GetStudentContext {
     );
 
     return {
-      kind: GetStudentContextResultKind.FOUND,
-      context: {
+      kind: GetStudentDossierResultKind.FOUND,
+      dossier: {
         student,
         lessonReports,
       },

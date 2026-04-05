@@ -9,6 +9,6 @@ export function buildAiServices() {
   const studentsServicesDeps = buildStudentsServices();
   return createAiServices({
     ...aiDeps,
-    getStudentContext: studentsServicesDeps.getStudentContext,
+    getStudentDossier: studentsServicesDeps.getStudentDossier,
   });
 }

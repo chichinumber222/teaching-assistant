@@ -1,8 +1,8 @@
 import "server-only";
 
 import { buildStudentsServices } from "@/modules/students/composition/build-students-services";
-import { GetStudentContextResultKind } from "@/modules/students/application/get-student-context/constants";
-import type { StudentContext } from "@/modules/students/application/get-student-context/types";
+import { GetStudentDossierResultKind } from "@/modules/students/application/get-student-dossier/constants";
+import type { StudentDossier } from "@/modules/students/application/get-student-dossier/types";
 
 type GetStudentPageDataInput = {
   teacherId: string;
@@ -12,7 +12,7 @@ type GetStudentPageDataInput = {
 type GetStudentPageDataResult =
   | {
       ok: true;
-      context: StudentContext;
+      data: StudentDossier;
     }
   | {
       ok: false;
@@ -29,25 +29,25 @@ export function getStudentPageData({
   studentId,
 }: GetStudentPageDataInput): GetStudentPageDataResult {
   try {
-    const { getStudentContext } = buildStudentsServices();
+    const { getStudentDossier } = buildStudentsServices();
 
-    const result = getStudentContext.execute({
+    const result = getStudentDossier.execute({
       teacherUserId: teacherId,
       studentId,
       lessonReportsLimit: 100,
     });
 
-    if (result.kind === GetStudentContextResultKind.FOUND) {
+    if (result.kind === GetStudentDossierResultKind.FOUND) {
       return {
         ok: true,
-        context: result.context,
+        data: result.dossier,
       };
     }
 
     if (
-      result.kind === GetStudentContextResultKind.TEACHER_NOT_FOUND ||
-      result.kind === GetStudentContextResultKind.USER_IS_NOT_TEACHER ||
-      result.kind === GetStudentContextResultKind.STUDENT_NOT_FOUND
+      result.kind === GetStudentDossierResultKind.TEACHER_NOT_FOUND ||
+      result.kind === GetStudentDossierResultKind.USER_IS_NOT_TEACHER ||
+      result.kind === GetStudentDossierResultKind.STUDENT_NOT_FOUND
     ) {
       return {
         ok: false,
