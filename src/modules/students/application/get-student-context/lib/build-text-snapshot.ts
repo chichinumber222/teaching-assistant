@@ -1,36 +1,9 @@
 import type { StudentContext } from "../types";
-import { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import { HomeworkStatus } from "@/modules/students/domain/homework-status";
-
-function formatOptionalText(value: string | null): string {
-  return value ?? "—";
-}
-
-function formatUnderstandingLevel(value: UnderstandingLevel): string {
-  switch (value) {
-    case UnderstandingLevel.Low:
-      return "низкий";
-    case UnderstandingLevel.Medium:
-      return "средний";
-    case UnderstandingLevel.High:
-      return "высокий";
-  }
-}
-
-function formatHomeworkStatus(value: HomeworkStatus): string {
-  switch (value) {
-    case HomeworkStatus.NotAssigned:
-      return "домашняя работа не задавалась";
-    case HomeworkStatus.NotChecked:
-      return "домашняя работа не проверялась";
-    case HomeworkStatus.Done:
-      return "домашняя работа выполнена";
-    case HomeworkStatus.PartlyDone:
-      return "домашняя работа выполнена частично";
-    case HomeworkStatus.NotDone:
-      return "домашняя работа не выполнена";
-  }
-}
+import {
+  formatHomeworkStatus,
+  formatOptionalText,
+  formatUnderstandingLevel,
+} from "@/modules/students/shared/format";
 
 function buildReportsTextSnapshot(
   reports: StudentContext["lessonReports"],

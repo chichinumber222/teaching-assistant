@@ -54,7 +54,7 @@ export function StudentsList({ students }: StudentsListProps) {
                   className="rounded-none border-b border-border bg-transparent pr-2 last:border-b-0 first:border-t-0"
                 >
                   <Link
-                    href={`${APP_ROUTES.students}/${encodeURIComponent(student.id)}`}
+                    href={APP_ROUTES.student(student.id)}
                     className="min-w-0 flex-1 px-4 py-3 transition-colors hover:bg-muted/20"
                   >
                     <ItemContent className="min-w-0 text-sm">
@@ -114,7 +114,7 @@ export function StudentsList({ students }: StudentsListProps) {
                     <TableCell>
                       <Button asChild variant="link" size="sm">
                         <Link
-                          href={`${APP_ROUTES.students}/${encodeURIComponent(student.id)}`}
+                          href={APP_ROUTES.student(student.id)}
                         >
                           Перейти
                         </Link>
