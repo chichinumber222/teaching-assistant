@@ -12,7 +12,7 @@ export const createStudentRequestSchema = z.object({
 });
 
 export const createStudentLessonReportRequestSchema = z.object({
-  lessonAt: z.iso.datetime(),
+  lessonAt: z.iso.date(),
   lessonPlan: z.string().trim().min(1).max(2000),
   uncompletedPlannedWork: optionalNullableTextField(2000),
   understandingLevel: z.enum(UnderstandingLevel),

@@ -1,5 +1,6 @@
-import { BackButton } from "@/modules/students/presentation/list-students/back-button";
+import { APP_ROUTES } from "@/shared/config/routes"
+import { NavigationLink } from "@/shared/ui/components/navigation-link"
 
 export default function StudentPageAction() {
-  return <BackButton />;
+  return <NavigationLink toHref={APP_ROUTES.students} />;
 }

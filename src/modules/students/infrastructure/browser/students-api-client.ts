@@ -1,6 +1,6 @@
 import { HttpClient } from "@/shared/lib/http/http-client";
-import { UnderstandingLevel } from "@/modules/students/domain/understanding-level"
-import { HomeworkStatus } from "@/modules/students/domain/homework-status"
+import { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
+import { HomeworkStatus } from "@/modules/students/domain/homework-status";
 
 export type CreateStudentRequestDto = {
   fullName: string;
@@ -53,17 +53,28 @@ export type CreateLessonReportResponseDto = {
 export class StudentsApiClient {
   constructor(private readonly httpClient: HttpClient) {}
 
-  async createStudent(payload: CreateStudentRequestDto): Promise<CreateStudentResponseDto> {
-    return await this.httpClient.request<CreateStudentResponseDto, CreateStudentRequestDto>({
+  async createStudent(
+    payload: CreateStudentRequestDto,
+  ): Promise<CreateStudentResponseDto> {
+    return await this.httpClient.request<
+      CreateStudentResponseDto,
+      CreateStudentRequestDto
+    >({
       url: "/api/students",
       method: "POST",
       body: payload,
     });
   }
 
-  async createLessonReport(payload: CreateLessonReportRequestDto): Promise<CreateLessonReportResponseDto> {
-    return await this.httpClient.request<CreateLessonReportResponseDto, CreateLessonReportRequestDto>({
-      url: "/api/students/[studentId]/lesson-reports",
+  async createLessonReport(
+    payload: CreateLessonReportRequestDto,
+    studentId: string,
+  ): Promise<CreateLessonReportResponseDto> {
+    return await this.httpClient.request<
+      CreateLessonReportResponseDto,
+      CreateLessonReportRequestDto
+    >({
+      url: `/api/students/${encodeURIComponent(studentId)}/lesson-reports`,
       method: "POST",
       body: payload,
     });

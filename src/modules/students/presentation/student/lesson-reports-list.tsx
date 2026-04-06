@@ -37,13 +37,24 @@ const dateFormatter = createDateFormatter();
 
 type LessonReportsListProps = {
   lessonReports: LessonReport[];
+  headerAction?: React.ReactNode;
 };
 
-export function LessonReportsList({ lessonReports }: LessonReportsListProps) {
+export function LessonReportsList({
+  lessonReports,
+  headerAction,
+}: LessonReportsListProps) {
   return (
     <Card size="sm" className="w-full bg-card shadow-sm">
       <CardHeader>
-        <CardTitle>Карточки занятий</CardTitle>
+        {headerAction ? (
+          <div className="flex items-center justify-between">
+            <CardTitle>Карточки занятий</CardTitle>
+            {headerAction}
+          </div>
+        ) : (
+          <CardTitle>Карточки занятий</CardTitle>
+        )}
         <CardDescription>Последние записи по ученику.</CardDescription>
       </CardHeader>
       <CardContent>

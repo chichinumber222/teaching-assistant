@@ -3,7 +3,6 @@ import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
 import { getStudentPageData } from "@/modules/students/infrastructure/server/get-student-page-data";
 import { StudentView } from "@/modules/students/presentation/student/student-view";
 import { notFound } from "next/navigation";
-import { lessonReportMocks } from "./mock";
 import { Fallback } from "@/modules/students/presentation/student/fallback";
 import { BasePage } from "@/shared/ui/containers/base-page";
 
@@ -24,11 +23,7 @@ export default async function StudentsIdPage({ params }: StudentsIdPageProps) {
       {pageData.ok ? (
         <StudentView
           student={pageData.data.student}
-          lessonReports={
-            pageData.data.lessonReports?.length
-              ? pageData.data.lessonReports
-              : lessonReportMocks
-          }
+          lessonReports={pageData.data.lessonReports}
         />
       ) : pageData.reason === "not_found" ? (
         notFound()

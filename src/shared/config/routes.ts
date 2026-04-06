@@ -8,6 +8,7 @@ export const APP_ROUTE_PATTERNS = {
   studentsNew: "/students/new",
   student: "/students/[studentId]",
   studentLessonReport: "/students/[studentId]/lesson-reports/[lessonReportId]",
+  studentLessonReportNew: "/students/[studentId]/lesson-reports/new",
 } as const;
 
 export const APP_ROUTES = {
@@ -28,6 +29,10 @@ export const APP_ROUTES = {
       studentId,
     )}/lesson-reports/${encodeURIComponent(lessonReportId)}`;
   },
+
+  studentLessonReportsNew(studentId: string): string {
+    return `/students/${encodeURIComponent(studentId)}/lesson-reports/new`;
+  },
 } as const;
 
 export const GUEST_ROUTES = [
@@ -41,6 +46,7 @@ export const TEACHER_ROLE_ROUTES = [
   APP_ROUTE_PATTERNS.student,
   APP_ROUTE_PATTERNS.studentsNew,
   APP_ROUTE_PATTERNS.studentLessonReport,
+  APP_ROUTE_PATTERNS.studentLessonReportNew,
 ] as const;
 
 export const ADMIN_ROLE_ROUTES = [APP_ROUTE_PATTERNS.admin] as const;

@@ -34,7 +34,7 @@ export function getStudentPageData({
     const result = getStudentDossier.execute({
       teacherUserId: teacherId,
       studentId,
-      lessonReportsLimit: 100,
+      lessonReportsLimit: 50,
     });
 
     if (result.kind === GetStudentDossierResultKind.FOUND) {
