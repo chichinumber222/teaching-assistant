@@ -72,6 +72,9 @@ export default function CreateReportForm({ studentId }: Props) {
                 onChange(event);
                 clearGlobalError();
               }}
+              calendarProps={{
+                disabled: { after: new Date() },
+              }}
             />
             {error && <FieldError errors={[error]} id="lessonAt-error" />}
           </Field>

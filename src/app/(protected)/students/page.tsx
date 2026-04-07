@@ -3,7 +3,7 @@ import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
 import { getStudentsPageData } from "@/modules/students/infrastructure/server/get-students-page-data";
 import { StudentsList } from "@/modules/students/presentation/list-students/students-list";
 import { BasePage } from "@/shared/ui/containers/base-page";
-import { Fallback } from "@/modules/students/presentation/list-students/fallback";
+import { PageFallback } from "@/shared/ui/components/page-fallback";
 
 export default async function StudentsPage() {
   const teacher = await requireRole(UserRole.Teacher);
@@ -14,7 +14,10 @@ export default async function StudentsPage() {
       {pageData.ok ? (
         <StudentsList students={pageData.students} />
       ) : (
-        <Fallback />
+        <PageFallback
+          title="Ученики"
+          description="Список всех ваших учеников."
+        />
       )}
     </BasePage>
   );

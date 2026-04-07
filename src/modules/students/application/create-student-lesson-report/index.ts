@@ -53,7 +53,6 @@ export class CreateStudentLessonReport {
       whatWentWell: input.whatWentWell,
       difficulties: input.difficulties,
       homeworkStatus: input.homeworkStatus,
-      homeworkComment: input.homeworkComment,
       teacherComment: input.teacherComment,
     });
 

@@ -66,7 +66,6 @@ export async function POST(
       whatWentWell: parsedBody.data.whatWentWell,
       difficulties: parsedBody.data.difficulties,
       homeworkStatus: parsedBody.data.homeworkStatus,
-      homeworkComment: parsedBody.data.homeworkComment,
       teacherComment: parsedBody.data.teacherComment,
     });
 
@@ -101,4 +100,3 @@ export async function POST(
     );
   }
 }
-

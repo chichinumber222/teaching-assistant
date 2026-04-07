@@ -7,7 +7,7 @@ import {
   CardTitle,
 } from "@/shared/ui/components/card";
 import { APP_ROUTES } from "@/shared/config/routes";
-import { AuthLink } from "@/shared/ui/components/auth-link";
+import { AuthLink } from "@/modules/auth/presentation/components/auth-link";
 
 export function LoginView() {
   return (

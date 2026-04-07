@@ -20,7 +20,6 @@ export const createReportSchema = z.object({
   homeworkStatus: z.enum(HomeworkStatus, {
     error: () => ({ message: "Укажите статус домашней работы" }),
   }),
-  homeworkComment: optionalNullableTextField(2000),
   teacherComment: optionalNullableTextField(2000),
 });
 

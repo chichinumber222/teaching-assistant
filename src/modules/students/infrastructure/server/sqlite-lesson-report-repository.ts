@@ -19,7 +19,6 @@ type LessonReportRow = {
   what_went_well: string | null;
   difficulties: string | null;
   homework_status: HomeworkStatus;
-  homework_comment: string | null;
   teacher_comment: string | null;
   created_at: string;
   updated_at: string;
@@ -36,7 +35,6 @@ function mapRowToLessonReport(row: LessonReportRow): LessonReport {
     whatWentWell: row.what_went_well,
     difficulties: row.difficulties,
     homeworkStatus: row.homework_status,
-    homeworkComment: row.homework_comment,
     teacherComment: row.teacher_comment,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -57,7 +55,6 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
           what_went_well,
           difficulties,
           homework_status,
-          homework_comment,
           teacher_comment,
           created_at,
           updated_at
@@ -85,7 +82,6 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
         what_went_well,
         difficulties,
         homework_status,
-        homework_comment,
         teacher_comment,
         created_at,
         updated_at
@@ -117,7 +113,6 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
         string | null,
         HomeworkStatus,
         string | null,
-        string | null,
         string,
         string,
       ]
@@ -133,12 +128,11 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
           what_went_well,
           difficulties,
           homework_status,
-          homework_comment,
           teacher_comment,
           created_at,
           updated_at
         )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       `,
     );
 
@@ -152,7 +146,6 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       data.whatWentWell,
       data.difficulties,
       data.homeworkStatus,
-      data.homeworkComment,
       data.teacherComment,
       now,
       now,
@@ -168,7 +161,6 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       whatWentWell: data.whatWentWell,
       difficulties: data.difficulties,
       homeworkStatus: data.homeworkStatus,
-      homeworkComment: data.homeworkComment,
       teacherComment: data.teacherComment,
       createdAt: now,
       updatedAt: now,

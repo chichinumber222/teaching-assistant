@@ -19,6 +19,5 @@ export const createStudentLessonReportRequestSchema = z.object({
   whatWentWell: optionalNullableTextField(2000),
   difficulties: optionalNullableTextField(2000),
   homeworkStatus: z.enum(HomeworkStatus),
-  homeworkComment: optionalNullableTextField(2000),
   teacherComment: optionalNullableTextField(2000),
 });

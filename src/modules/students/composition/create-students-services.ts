@@ -6,6 +6,7 @@ import { GetStudentDossier } from "@/modules/students/application/get-student-do
 import { StudentRepository } from "@/modules/students/domain/student-repository";
 import { LessonReportRepository } from "@/modules/students/domain/lesson-report-repository";
 import { UserRepository } from "@/modules/auth/domain/user-repository";
+import { GetStudent } from "@/modules/students/application/get-student"
 
 export type StudentsDependencies = {
   studentRepository: StudentRepository;
@@ -34,11 +35,14 @@ export function createStudentsServices(deps: StudentsDependencies) {
     lessonReportRepository,
   );
 
+  const getStudent = new GetStudent(userRepository, studentRepository);
+
   return {
     createStudent,
     createStudentLessonReport,
     listStudents,
     listStudentLessonReports,
     getStudentDossier,
+    getStudent,
   };
 }

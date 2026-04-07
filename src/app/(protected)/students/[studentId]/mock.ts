@@ -17,8 +17,6 @@ export const lessonReportMocks: LessonReport[] = [
     difficulties:
       "Путает do/does в вопросах и иногда пропускает вспомогательный глагол.",
     homeworkStatus: HomeworkStatus.Done,
-    homeworkComment:
-      "Домашнее задание выполнено полностью, но были 2 ошибки в вопросительных предложениях.",
     teacherComment:
       "На следующем занятии стоит дать больше коротких устных вопросов на автоматизацию.",
     createdAt: "2026-04-01T17:10:00.000Z",
@@ -37,8 +35,6 @@ export const lessonReportMocks: LessonReport[] = [
     difficulties:
       "В более длинных задачах теряется в условии и не сразу выделяет нужные данные.",
     homeworkStatus: HomeworkStatus.PartlyDone,
-    homeworkComment:
-      "Сделал только базовые задания, задачи повышенной сложности пропустил.",
     teacherComment:
       "Полезно потренировать именно чтение условия и выделение ключевых данных.",
     createdAt: "2026-03-27T17:20:00.000Z",
@@ -58,8 +54,6 @@ export const lessonReportMocks: LessonReport[] = [
     difficulties:
       "Сложно самостоятельно формулирует аргументы, мысли выражает слишком кратко.",
     homeworkStatus: HomeworkStatus.NotDone,
-    homeworkComment:
-      "Домашнее задание не выполнено, ученик сказал, что не успел из-за большой нагрузки в школе.",
     teacherComment:
       "Следует упростить следующий объем домашней работы и дать шаблон для аргументов.",
     createdAt: "2026-03-20T17:05:00.000Z",
@@ -78,8 +72,6 @@ export const lessonReportMocks: LessonReport[] = [
     difficulties:
       "Ошибается при приведении к общему знаменателю, если числа неочевидные.",
     homeworkStatus: HomeworkStatus.NotChecked,
-    homeworkComment:
-      "Домашнюю работу принес, но на занятии не успели проверить.",
     teacherComment:
       "Следующее занятие начать с быстрой проверки домашнего задания и 3 устных примеров.",
     createdAt: "2026-03-13T17:00:00.000Z",
@@ -99,7 +91,6 @@ export const lessonReportMocks: LessonReport[] = [
     difficulties:
       "Плохо запоминает формы неправильных глаголов и смешивает Past Simple с Present Simple.",
     homeworkStatus: HomeworkStatus.NotAssigned,
-    homeworkComment: null,
     teacherComment:
       "На следующем уроке нужен короткий warm-up на формы глаголов и больше устной практики.",
     createdAt: "2026-03-06T17:15:00.000Z",

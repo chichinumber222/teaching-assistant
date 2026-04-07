@@ -22,7 +22,6 @@ function buildReportsTextSnapshot(
         `Что у ученика получалось уверенно на занятии: ${formatOptionalText(report.whatWentWell)}`,
         `Основные трудности на занятии: ${formatOptionalText(report.difficulties)}`,
         `Статус домашней работы: ${formatHomeworkStatus(report.homeworkStatus)}`,
-        `Комментарий по домашней работе: ${formatOptionalText(report.homeworkComment)}`,
         `Комментарий преподавателя о занятии: ${formatOptionalText(report.teacherComment)}`,
       ].join("\n");
     })

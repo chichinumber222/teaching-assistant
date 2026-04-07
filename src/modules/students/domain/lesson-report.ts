@@ -11,7 +11,6 @@ export type LessonReport = {
   whatWentWell: string | null;
   difficulties: string | null;
   homeworkStatus: HomeworkStatus;
-  homeworkComment: string | null;
   teacherComment: string | null;
   createdAt: string;
   updatedAt: string;

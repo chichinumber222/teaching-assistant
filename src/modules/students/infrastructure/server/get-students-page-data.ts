@@ -15,7 +15,6 @@ type GetStudentsPageDataResult =
     }
   | {
       ok: false;
-      message: string;
     };
 
 export function getStudentsPageData({
@@ -31,7 +30,6 @@ export function getStudentsPageData({
     if (result.kind !== ListStudentsResultKind.LISTED) {
       return {
         ok: false,
-        message: "Не удалось загрузить список учеников.",
       };
     }
 
@@ -42,7 +40,6 @@ export function getStudentsPageData({
   } catch {
     return {
       ok: false,
-      message: "Не удалось загрузить список учеников.",
     };
   }
 }

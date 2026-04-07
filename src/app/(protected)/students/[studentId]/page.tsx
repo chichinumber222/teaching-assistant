@@ -3,8 +3,8 @@ import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
 import { getStudentPageData } from "@/modules/students/infrastructure/server/get-student-page-data";
 import { StudentView } from "@/modules/students/presentation/student/student-view";
 import { notFound } from "next/navigation";
-import { Fallback } from "@/modules/students/presentation/student/fallback";
 import { BasePage } from "@/shared/ui/containers/base-page";
+import { PageFallback } from "@/shared/ui/components/page-fallback";
 
 type StudentsIdPageProps = {
   params: Promise<{ studentId: string }>;
@@ -28,7 +28,7 @@ export default async function StudentsIdPage({ params }: StudentsIdPageProps) {
       ) : pageData.reason === "not_found" ? (
         notFound()
       ) : (
-        <Fallback />
+        <PageFallback />
       )}
     </BasePage>
   );
