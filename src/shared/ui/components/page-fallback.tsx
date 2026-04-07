@@ -25,7 +25,7 @@ export function PageFallback({
   className,
 }: PageFallbackProps) {
   return (
-    <Card size="sm" className={cn("w-full max-w-lg mx-auto", className)}>
+    <Card size="sm" className={cn("w-full", className)}>
       {title || description ? (
         <CardHeader>
           {title ? <CardTitle>{title}</CardTitle> : null}

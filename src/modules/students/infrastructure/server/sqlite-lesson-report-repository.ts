@@ -42,6 +42,36 @@ function mapRowToLessonReport(row: LessonReportRow): LessonReport {
 }
 
 export class SqliteLessonReportRepository implements LessonReportRepository {
+  findById(id: string): LessonReport | null {
+    const statement = db.prepare<[string], LessonReportRow>(
+      `
+        SELECT
+          id,
+          student_id,
+          lesson_at,
+          lesson_plan,
+          uncompleted_planned_work,
+          understanding_level,
+          what_went_well,
+          difficulties,
+          homework_status,
+          teacher_comment,
+          created_at,
+          updated_at
+        FROM lesson_reports
+        WHERE id = ?
+      `,
+    );
+
+    const row = statement.get(id);
+
+    if (!row) {
+      return null;
+    }
+
+    return mapRowToLessonReport(row);
+  }
+
   findManyByStudentId(studentId: string): LessonReport[] {
     const statement = db.prepare<[string], LessonReportRow>(
       `
@@ -70,32 +100,32 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
   }
 
   findManyRecentByStudentId(studentId: string, limit: number): LessonReport[] {
-  const statement = db.prepare<[string, number], LessonReportRow>(
-    `
-      SELECT
-        id,
-        student_id,
-        lesson_at,
-        lesson_plan,
-        uncompleted_planned_work,
-        understanding_level,
-        what_went_well,
-        difficulties,
-        homework_status,
-        teacher_comment,
-        created_at,
-        updated_at
-      FROM lesson_reports
-      WHERE student_id = ?
-      ORDER BY lesson_at DESC, created_at DESC
-      LIMIT ?
+    const statement = db.prepare<[string, number], LessonReportRow>(
+      `
+        SELECT
+          id,
+          student_id,
+          lesson_at,
+          lesson_plan,
+          uncompleted_planned_work,
+          understanding_level,
+          what_went_well,
+          difficulties,
+          homework_status,
+          teacher_comment,
+          created_at,
+          updated_at
+        FROM lesson_reports
+        WHERE student_id = ?
+        ORDER BY lesson_at DESC, created_at DESC
+        LIMIT ?
     `,
-  );
+    );
 
-  const rows = statement.all(studentId, limit);
+    const rows = statement.all(studentId, limit);
 
-  return rows.map(mapRowToLessonReport);
-}
+    return rows.map(mapRowToLessonReport);
+  }
 
   create(data: CreateLessonReportData): LessonReport {
     const id = randomUUID();
