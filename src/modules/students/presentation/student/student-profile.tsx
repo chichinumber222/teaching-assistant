@@ -6,14 +6,16 @@ import {
 } from "@/shared/ui/components/card";
 import { formatOptionalText } from "@/modules/students/shared/format";
 import { Student } from "@/modules/students/domain/student";
+import { cn } from "@/shared/ui/lib/utils";
 
 type StudentProfileProps = {
   student: Student;
+  className?: string;
 };
 
-export function StudentProfile({ student }: StudentProfileProps) {
+export function StudentProfile({ student, className }: StudentProfileProps) {
   return (
-    <Card className="w-full bg-card shadow-sm">
+    <Card className={cn("w-full bg-card shadow-sm", className)}>
       <CardHeader>
         <CardTitle>{student.fullName}</CardTitle>
       </CardHeader>

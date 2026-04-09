@@ -4,12 +4,14 @@ import { buildStudentsServices } from "@/modules/students/composition/build-stud
 import { GetStudentDossierResultKind } from "@/modules/students/application/get-student-dossier/constants";
 import type { StudentDossier } from "@/modules/students/application/get-student-dossier/types";
 
-type GetStudentPageDataInput = {
+const LIMIT_LESSON_REPORTS = 50;
+
+type GetStudentDossierViewDataInput = {
   teacherId: string;
   studentId: string;
 };
 
-type GetStudentPageDataResult =
+type GetStudentDossierViewDataResult =
   | {
       ok: true;
       data: StudentDossier;
@@ -24,17 +26,17 @@ type GetStudentPageDataResult =
       message: string;
     };
 
-export function getStudentPageData({
+export function getStudentDossierViewData({
   teacherId,
   studentId,
-}: GetStudentPageDataInput): GetStudentPageDataResult {
+}: GetStudentDossierViewDataInput): GetStudentDossierViewDataResult {
   try {
     const { getStudentDossier } = buildStudentsServices();
 
     const result = getStudentDossier.execute({
       teacherUserId: teacherId,
       studentId,
-      lessonReportsLimit: 50,
+      lessonReportsLimit: LIMIT_LESSON_REPORTS,
     });
 
     if (result.kind === GetStudentDossierResultKind.FOUND) {

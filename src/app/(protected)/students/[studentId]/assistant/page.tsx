@@ -1,28 +1,33 @@
+import { AssistantView } from "@/modules/ai/presentation/assistant/assistant-view";
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
-import { getCreateReportPageData } from "@/modules/students/infrastructure/server/get-create-report-page-data";
-import { CreateReportView } from "@/modules/students/presentation/create-lesson-report/create-report-view";
+import { getStudentDossierViewData } from "@/modules/students/infrastructure/server/get-student-dossier-view-data";
 import { NotFound } from "@/shared/ui/components/not-found";
 import { PageFallback } from "@/shared/ui/components/page-fallback";
 import { BasePage } from "@/shared/ui/containers/base-page";
 
-type Props = {
+type AssistantPageProps = {
   params: Promise<{ studentId: string }>;
 };
 
-export default async function CreateReportPage({ params }: Props) {
+export default async function AssistantPage({
+  params,
+}: AssistantPageProps) {
   const teacher = await requireRole(UserRole.Teacher);
   const { studentId } = await params;
-  const pageData = getCreateReportPageData({
+  const viewData = getStudentDossierViewData({
     teacherId: teacher.id,
     studentId,
   });
 
   return (
     <BasePage>
-      {pageData.ok ? (
-        <CreateReportView studentId={pageData.student.id} />
-      ) : pageData.reason === "not_found" ? (
+      {viewData.ok ? (
+        <AssistantView
+          student={viewData.data.student}
+          reports={viewData.data.lessonReports}
+        />
+      ) : viewData.reason === "not_found" ? (
         <NotFound />
       ) : (
         <PageFallback />

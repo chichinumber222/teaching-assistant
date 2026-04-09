@@ -10,6 +10,8 @@ import { GenerateNextLessonPlanResultKind } from "./constants";
 import { buildPrompt } from "./lib/build-prompt";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
 
+const LESSON_REPORTS_LIMIT = 3;
+
 export class GenerateNextLessonPlan {
   constructor(
     private readonly getStudentDossier: GetStudentDossier,
@@ -22,7 +24,7 @@ export class GenerateNextLessonPlan {
     const dossierResult = this.getStudentDossier.execute({
       teacherUserId: input.teacherUserId,
       studentId: input.studentId,
-      lessonReportsLimit: 3,
+      lessonReportsLimit: LESSON_REPORTS_LIMIT,
     });
 
     if (dossierResult.kind === GetStudentDossierResultKind.TEACHER_NOT_FOUND) {
@@ -54,8 +56,8 @@ export class GenerateNextLessonPlan {
           text: prompt,
         },
       ],
-      temperature: 0.3,
-      maxTokens: 700,
+      temperature: 0.4,
+      maxTokens: 900,
     });
 
     return {

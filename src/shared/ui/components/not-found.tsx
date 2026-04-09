@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@/shared/ui/components/card";
 import { Item, ItemContent, ItemTitle } from "@/shared/ui/components/item";
 
-export default function NotFound() {
+export function NotFound() {
   return (
     <Card className="min-h-[60vh] w-full grid place-items-center">
       <CardContent>

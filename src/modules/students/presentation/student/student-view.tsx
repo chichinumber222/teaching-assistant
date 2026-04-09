@@ -2,25 +2,35 @@ import type { Student } from "@/modules/students/domain/student";
 import type { LessonReport } from "@/modules/students/domain/lesson-report";
 import { LessonReportsList } from "./lesson-reports-list";
 import { StudentProfile } from "./student-profile";
-import { CreateReportLink } from "../create-lesson-report/create-report-link";
-import { APP_ROUTES } from "@/shared/config/routes";
 
 type StudentPageViewProps = {
   student: Student;
   lessonReports: LessonReport[];
+  reportsAction?: React.ReactNode;
+  studentPageAction?: React.ReactNode;
 };
 
-export function StudentView({ student, lessonReports }: StudentPageViewProps) {
+export function StudentView({
+  student,
+  lessonReports,
+  reportsAction,
+  studentPageAction,
+}: StudentPageViewProps) {
   return (
-    <div className="flex w-full flex-col gap-4">
-      <StudentProfile student={student} />
+    <div className="w-full flex flex-col gap-4">
+      {studentPageAction ? (
+        <div className="flex flex-col gap-4 md:flex-row">
+          <StudentProfile student={student} className="flex-1" />
+          <div className="md:w-50 flex md:items-stretch">
+            {studentPageAction}
+          </div>
+        </div>
+      ) : (
+        <StudentProfile student={student} />
+      )}
       <LessonReportsList
         lessonReports={lessonReports}
-        headerAction={
-          <CreateReportLink
-            href={APP_ROUTES.studentLessonReportsNew(student.id)}
-          />
-        }
+        headerAction={reportsAction}
       />
     </div>
   );

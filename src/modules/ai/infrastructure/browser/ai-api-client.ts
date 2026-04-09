@@ -11,4 +11,13 @@ export class AiApiClient {
       url: "/api/ai/generate",
     });
   }
+
+  async generateNextLessonPlan(
+    studentId: string,
+  ): Promise<GenerateResponseDto> {
+    return this.httpClient.request<GenerateResponseDto>({
+      method: "POST",
+      url: `/api/students/${encodeURIComponent(studentId)}/ai/next-lesson-plan`,
+    });
+  }
 }

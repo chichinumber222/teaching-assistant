@@ -1,3 +1,4 @@
+import { TooltipProvider } from "@/shared/ui/components/tooltip";
 import "./globals.css";
 
 type Props = {
@@ -7,7 +8,9 @@ type Props = {
 export default function RootLayout({ children }: Props) {
   return (
     <html>
-      <body>{children}</body>
+      <body>
+        <TooltipProvider>{children}</TooltipProvider>
+      </body>
     </html>
   );
 }
