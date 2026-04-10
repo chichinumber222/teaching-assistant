@@ -10,9 +10,7 @@ type AssistantPageProps = {
   params: Promise<{ studentId: string }>;
 };
 
-export default async function AssistantPage({
-  params,
-}: AssistantPageProps) {
+export default async function AssistantPage({ params }: AssistantPageProps) {
   const teacher = await requireRole(UserRole.Teacher);
   const { studentId } = await params;
   const viewData = getStudentDossierViewData({

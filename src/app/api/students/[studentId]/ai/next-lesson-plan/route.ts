@@ -7,6 +7,8 @@ import { buildAiServices } from "@/modules/ai/composition/build-ai-services";
 import { GenerateNextLessonPlanResultKind } from "@/modules/ai/application/generate-next-lesson-plan/constants";
 import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
 import { MemoryRateLimiter } from "@/app/api/_lib/shared/rate-limiter";
+import { parseJson } from "@/app/api/_lib/shared/parse-json";
+import { generateNextLessonPlanRequestSchema } from "@/modules/ai/infrastructure/server/ai-schemes";
 
 const rateLimiter = new MemoryRateLimiter();
 
@@ -49,12 +51,31 @@ export async function POST(
       );
     }
 
+    const json = await parseJson(request);
+
+    if (!json.ok) {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
+
+    const parsedBody = generateNextLessonPlanRequestSchema.safeParse(json.data);
+
+    if (!parsedBody.success) {
+      return NextResponse.json(
+        { message: "Invalid request body" },
+        { status: 400 },
+      );
+    }
+
     const { studentId } = await params;
 
     const { generateNextLessonPlan } = buildAiServices();
     const result = await generateNextLessonPlan.execute({
       teacherUserId: authResult.user.id,
       studentId,
+      mode: parsedBody.data.mode,
     });
 
     if (result.kind === GenerateNextLessonPlanResultKind.TEACHER_NOT_FOUND) {

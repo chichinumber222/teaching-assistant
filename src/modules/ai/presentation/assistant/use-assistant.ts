@@ -5,14 +5,15 @@ import axios from "axios";
 import { aiClient } from "@/modules/ai/infrastructure/browser/ai-client";
 import { GenerateResponseDto } from "@/modules/ai/infrastructure/browser/ai-api-client";
 import { AssistantOperationKind } from "./assistant-operations";
+import { NextLessonPlanMode } from "@/modules/ai/application/generate-next-lesson-plan/constants";
 
 type UseAssistantResult = {
   generateAssistantResult: (
-    operation: AssistantOperationKind,
+    operationKind: AssistantOperationKind,
     studentId: string,
   ) => Promise<boolean>;
   result: string | null;
-  selectedOperation: AssistantOperationKind | null;
+  selectedOperationKind: AssistantOperationKind | null;
   globalError: string | null;
   isGlobalLoading: boolean;
   clearGlobalError: () => void;
@@ -21,7 +22,7 @@ type UseAssistantResult = {
 
 export function useAssistant(): UseAssistantResult {
   const [result, setResult] = useState<string | null>(null);
-  const [selectedOperation, setSelectedOperation] =
+  const [selectedOperationKind, setSelectedOperationKind] =
     useState<AssistantOperationKind | null>(null);
   const [globalError, setGlobalError] = useState<string | null>(null);
   const [isGlobalLoading, setIsGlobalLoading] = useState(false);
@@ -32,24 +33,31 @@ export function useAssistant(): UseAssistantResult {
 
   const clearResult = () => {
     setResult(null);
-    setSelectedOperation(null);
+    setSelectedOperationKind(null);
   };
 
   const generateAssistantResult = async (
-    operation: AssistantOperationKind,
+    operationKind: AssistantOperationKind,
     studentId: string,
   ): Promise<boolean> => {
     setGlobalError(null);
     setIsGlobalLoading(true);
-    setSelectedOperation(operation);
+    setSelectedOperationKind(operationKind);
     setResult(null);
 
     try {
       let generatedResult: GenerateResponseDto;
 
-      switch (operation) {
+      switch (operationKind) {
         case AssistantOperationKind.NextLessonPlan:
-          generatedResult = await aiClient.generateNextLessonPlan(studentId);
+          generatedResult = await aiClient.generateNextLessonPlan(studentId, {
+            mode: NextLessonPlanMode.Standard,
+          });
+          break;
+        case AssistantOperationKind.NextLessonPlanAlternatives:
+          generatedResult = await aiClient.generateNextLessonPlan(studentId, {
+            mode: NextLessonPlanMode.Alternatives,
+          });
           break;
         default:
           throw new Error("Unsupported operation");
@@ -94,7 +102,7 @@ export function useAssistant(): UseAssistantResult {
   return {
     generateAssistantResult,
     result,
-    selectedOperation,
+    selectedOperationKind,
     globalError,
     isGlobalLoading,
     clearGlobalError,

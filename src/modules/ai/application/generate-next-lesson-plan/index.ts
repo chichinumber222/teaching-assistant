@@ -6,11 +6,16 @@ import type {
   GenerateNextLessonPlanInput,
   GenerateNextLessonPlanResult,
 } from "./types";
-import { GenerateNextLessonPlanResultKind } from "./constants";
+import {
+  GenerateNextLessonPlanResultKind,
+  NextLessonPlanMode,
+} from "./constants";
 import { buildPrompt } from "./lib/build-prompt";
+import { buildAlternativesPrompt } from "./lib/build-alternatives-prompt";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
 
 const LESSON_REPORTS_LIMIT = 3;
+const MAX_TOKENS_TO_GENERATE = 800;
 
 export class GenerateNextLessonPlan {
   constructor(
@@ -47,7 +52,15 @@ export class GenerateNextLessonPlan {
       };
     }
 
-    const prompt = buildPrompt(buildTextSnapshot(dossierResult.dossier));
+    const dossierTextSnapshot = buildTextSnapshot(dossierResult.dossier);
+
+    const prompt =
+      input.mode === NextLessonPlanMode.Alternatives
+        ? buildAlternativesPrompt(dossierTextSnapshot)
+        : buildPrompt(dossierTextSnapshot);
+
+    const temperature =
+      input.mode === NextLessonPlanMode.Alternatives ? 0.7 : 0.35;
 
     const result = await this.languageModel.generateText({
       messages: [
@@ -56,8 +69,8 @@ export class GenerateNextLessonPlan {
           text: prompt,
         },
       ],
-      temperature: 0.4,
-      maxTokens: 700,
+      temperature,
+      maxTokens: MAX_TOKENS_TO_GENERATE,
     });
 
     return {

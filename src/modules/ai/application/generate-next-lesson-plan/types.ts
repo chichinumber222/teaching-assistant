@@ -1,8 +1,9 @@
-import { GenerateNextLessonPlanResultKind } from "./constants";
+import { GenerateNextLessonPlanResultKind, type NextLessonPlanMode } from "./constants";
 
 export type GenerateNextLessonPlanInput = {
   teacherUserId: string;
   studentId: string;
+  mode: NextLessonPlanMode;
 };
 
 export type GenerateNextLessonPlanResult =

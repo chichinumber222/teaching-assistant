@@ -31,6 +31,9 @@ import {
   TooltipTrigger,
 } from "@/shared/ui/components/tooltip";
 import Markdown from "react-markdown";
+import { markdownToPlainText } from "./lib/markdown-to-plain-text";
+import { downloadPlainTextFile } from "./lib/download-plain-text-file";
+import { IconDownload } from "@tabler/icons-react";
 
 type AssistantViewProps = {
   student: Student;
@@ -47,6 +50,7 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
     globalError,
     clearResult,
     clearGlobalError,
+    selectedOperationKind,
   } = useAssistant();
 
   const usedReports = useMemo(
@@ -58,6 +62,19 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
     clearResult();
     clearGlobalError();
     await generateAssistantResult(operationKind, student.id);
+  };
+
+  const handleDownload = () => {
+    if (!result) {
+      return;
+    }
+    const currentOperation = ASSISTANT_OPERATIONS.find(
+      (op) => op.kind === selectedOperationKind,
+    );
+    const fileName = `${currentOperation?.title || "Результат Ассистента"}.txt`;
+
+    const plainText = markdownToPlainText(result);
+    downloadPlainTextFile(plainText, fileName);
   };
 
   return (
@@ -98,7 +115,18 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
 
       <Card className="w-full bg-card">
         <CardHeader>
-          <CardTitle>Результат</CardTitle>
+          <div className="flex between">
+            <CardTitle>Результат</CardTitle>
+            {result ? (
+              <Button
+                variant="outline"
+                onClick={handleDownload}
+                className="ml-auto"
+              >
+                <IconDownload className="mr-1.2" />
+              </Button>
+            ) : null}
+          </div>
           <CardDescription>Здесь появится ответ ИИ-ассистента.</CardDescription>
         </CardHeader>
         <CardContent>
