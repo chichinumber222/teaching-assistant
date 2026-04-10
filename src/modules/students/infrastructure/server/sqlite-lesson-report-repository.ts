@@ -6,8 +6,8 @@ import type {
   CreateLessonReportData,
   LessonReportRepository,
 } from "@/modules/students/domain/lesson-report-repository";
-import type { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import type { HomeworkStatus } from "@/modules/students/domain/homework-status";
+import { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
+import { HomeworkStatus } from "@/modules/students/domain/homework-status";
 
 type LessonReportRow = {
   id: string;
@@ -29,12 +29,8 @@ function mapRowToLessonReport(row: LessonReportRow): LessonReport {
     id: row.id,
     studentId: row.student_id,
     lessonAt: row.lesson_at,
-    lessonPlan: row.lesson_plan,
-    uncompletedPlannedWork: row.uncompleted_planned_work,
-    understandingLevel: row.understanding_level,
-    whatWentWell: row.what_went_well,
-    difficulties: row.difficulties,
-    homeworkStatus: row.homework_status,
+    lessonFocus: row.lesson_plan,
+    difficulties: row.difficulties ?? "",
     teacherComment: row.teacher_comment,
     createdAt: row.created_at,
     updatedAt: row.updated_at,
@@ -131,6 +127,9 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
     const id = randomUUID();
     const now = new Date().toISOString();
 
+    const legacyUnderstandingLevel: UnderstandingLevel = UnderstandingLevel.Medium;
+    const legacyHomeworkStatus: HomeworkStatus = HomeworkStatus.NotAssigned;
+
     const statement = db.prepare<
       [
         string,
@@ -140,7 +139,7 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
         string | null,
         UnderstandingLevel,
         string | null,
-        string | null,
+        string,
         HomeworkStatus,
         string | null,
         string,
@@ -148,34 +147,34 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       ]
     >(
       `
-        INSERT INTO lesson_reports (
-          id,
-          student_id,
-          lesson_at,
-          lesson_plan,
-          uncompleted_planned_work,
-          understanding_level,
-          what_went_well,
-          difficulties,
-          homework_status,
-          teacher_comment,
-          created_at,
-          updated_at
-        )
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-      `,
+      INSERT INTO lesson_reports (
+        id,
+        student_id,
+        lesson_at,
+        lesson_plan,
+        uncompleted_planned_work,
+        understanding_level,
+        what_went_well,
+        difficulties,
+        homework_status,
+        teacher_comment,
+        created_at,
+        updated_at
+      )
+      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `,
     );
 
     statement.run(
       id,
       data.studentId,
       data.lessonAt,
-      data.lessonPlan,
-      data.uncompletedPlannedWork,
-      data.understandingLevel,
-      data.whatWentWell,
+      data.lessonFocus,
+      null,
+      legacyUnderstandingLevel,
+      null,
       data.difficulties,
-      data.homeworkStatus,
+      legacyHomeworkStatus,
       data.teacherComment,
       now,
       now,
@@ -185,12 +184,8 @@ export class SqliteLessonReportRepository implements LessonReportRepository {
       id,
       studentId: data.studentId,
       lessonAt: data.lessonAt,
-      lessonPlan: data.lessonPlan,
-      uncompletedPlannedWork: data.uncompletedPlannedWork,
-      understandingLevel: data.understandingLevel,
-      whatWentWell: data.whatWentWell,
+      lessonFocus: data.lessonFocus,
       difficulties: data.difficulties,
-      homeworkStatus: data.homeworkStatus,
       teacherComment: data.teacherComment,
       createdAt: now,
       updatedAt: now,

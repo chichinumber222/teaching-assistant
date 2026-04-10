@@ -60,12 +60,8 @@ export async function POST(
       teacherUserId: authResult.user.id,
       studentId,
       lessonAt: parsedBody.data.lessonAt,
-      lessonPlan: parsedBody.data.lessonPlan,
-      uncompletedPlannedWork: parsedBody.data.uncompletedPlannedWork,
-      understandingLevel: parsedBody.data.understandingLevel,
-      whatWentWell: parsedBody.data.whatWentWell,
+      lessonFocus: parsedBody.data.lessonFocus,
       difficulties: parsedBody.data.difficulties,
-      homeworkStatus: parsedBody.data.homeworkStatus,
       teacherComment: parsedBody.data.teacherComment,
     });
 

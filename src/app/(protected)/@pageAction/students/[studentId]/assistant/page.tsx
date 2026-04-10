@@ -2,7 +2,7 @@ import { APP_ROUTES } from "@/shared/config/routes";
 import { NavigationLink } from "@/shared/ui/components/navigation-link";
 
 type Props = {
-  params: Promise<{ studentId: string; lessonReportId: string }>;
+  params: Promise<{ studentId: string }>;
 };
 
 export default async function AssistantPageAction({ params }: Props) {

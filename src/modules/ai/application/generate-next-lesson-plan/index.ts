@@ -57,7 +57,7 @@ export class GenerateNextLessonPlan {
         },
       ],
       temperature: 0.4,
-      maxTokens: 900,
+      maxTokens: 700,
     });
 
     return {

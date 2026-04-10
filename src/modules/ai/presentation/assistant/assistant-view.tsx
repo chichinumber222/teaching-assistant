@@ -107,7 +107,9 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
               <p>Генерируем ответ на основе данных ученика...</p>
             )}
             {globalError && <p className="text-red-500">{globalError}</p>}
-            <Markdown>{result}</Markdown>
+            <div className="prose">
+              <Markdown>{result}</Markdown>
+            </div>
           </div>
         </CardContent>
         <CardFooter className="flex-wrap gap-1.5">

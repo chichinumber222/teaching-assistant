@@ -15,7 +15,9 @@ export class CreateStudentLessonReport {
     private readonly lessonReportRepository: LessonReportRepository,
   ) {}
 
-  execute(input: CreateStudentLessonReportInput): CreateStudentLessonReportResult {
+  execute(
+    input: CreateStudentLessonReportInput,
+  ): CreateStudentLessonReportResult {
     const teacher = this.userRepository.findById(input.teacherUserId);
 
     if (!teacher) {
@@ -47,12 +49,8 @@ export class CreateStudentLessonReport {
     const lessonReport = this.lessonReportRepository.create({
       studentId: input.studentId,
       lessonAt: input.lessonAt,
-      lessonPlan: input.lessonPlan,
-      uncompletedPlannedWork: input.uncompletedPlannedWork,
-      understandingLevel: input.understandingLevel,
-      whatWentWell: input.whatWentWell,
+      lessonFocus: input.lessonFocus,
       difficulties: input.difficulties,
-      homeworkStatus: input.homeworkStatus,
       teacherComment: input.teacherComment,
     });
 

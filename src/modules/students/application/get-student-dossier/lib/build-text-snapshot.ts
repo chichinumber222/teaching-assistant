@@ -1,9 +1,5 @@
 import type { StudentDossier } from "../types";
-import {
-  formatHomeworkStatus,
-  formatOptionalText,
-  formatUnderstandingLevel,
-} from "@/modules/students/shared/format";
+import { formatOptionalText } from "@/modules/students/shared/format";
 
 function buildReportsTextSnapshot(
   reports: StudentDossier["lessonReports"],
@@ -16,12 +12,8 @@ function buildReportsTextSnapshot(
     .map((report) => {
       return [
         `Дата занятия: ${report.lessonAt}`,
-        `План занятия: ${report.lessonPlan}`,
-        `Что не успели пройти из запланированного: ${formatOptionalText(report.uncompletedPlannedWork)}`,
-        `Уровень понимания материала на занятии: ${formatUnderstandingLevel(report.understandingLevel)}`,
-        `Что у ученика получалось уверенно на занятии: ${formatOptionalText(report.whatWentWell)}`,
-        `Основные трудности на занятии: ${formatOptionalText(report.difficulties)}`,
-        `Статус домашней работы: ${formatHomeworkStatus(report.homeworkStatus)}`,
+        `Что проходили или отрабатывали на занятии: ${report.lessonFocus}`,
+        `Основные трудности ученика на занятии: ${formatOptionalText(report.difficulties)}`,
         `Комментарий преподавателя о занятии: ${formatOptionalText(report.teacherComment)}`,
       ].join("\n");
     })
@@ -48,7 +40,7 @@ export function buildTextSnapshot({
   return [
     buildStudentProfileTextSnapshot(student),
     "",
-    "Последние отчеты по занятиям:",
+    "Последние отчеты (карточки) по занятиям ученика:",
     buildReportsTextSnapshot(lessonReports),
   ].join("\n");
 }

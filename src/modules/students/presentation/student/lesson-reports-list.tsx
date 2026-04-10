@@ -26,11 +26,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/components/table";
-import {
-  formatHomeworkStatus,
-  formatUnderstandingLevel,
-} from "@/modules/students/shared/format";
-import { formatUncompletedPlannedWork } from "@/modules/students/shared/format";
 import { createDateFormatter } from "@/shared/lib/date/formatter";
 
 const dateFormatter = createDateFormatter();
@@ -81,11 +76,12 @@ export function LessonReportsList({
                     <ItemContent className="min-w-0 text-sm">
                       <ItemTitle>{dateFormatter(report.lessonAt)}</ItemTitle>
                       <ItemDescription className="mt-0.5 [overflow-wrap:anywhere] line-clamp-2">
-                        План занятия: {report.lessonPlan}
+                        <span className="text-foreground">Фокус занятия:</span>{" "}
+                        {report.lessonFocus}
                       </ItemDescription>
                       <ItemDescription className="mt-1 [overflow-wrap:anywhere] line-clamp-2">
-                        Уровень понимания:{" "}
-                        {formatUnderstandingLevel(report.understandingLevel)}
+                        <span className="text-foreground">Трудности:</span>{" "}
+                        {report.difficulties}
                       </ItemDescription>
                     </ItemContent>
                   </Link>
@@ -111,12 +107,8 @@ export function LessonReportsList({
               <TableHeader className="bg-muted/30">
                 <TableRow className="hover:bg-transparent">
                   <TableHead className="w-25">Дата</TableHead>
-                  <TableHead>План занятия</TableHead>
-                  <TableHead>Что не успели?</TableHead>
-                  <TableHead className="w-45  text-center">
-                    Уровень понимания
-                  </TableHead>
-                  <TableHead className="w-40">Статус д/з</TableHead>
+                  <TableHead>Фокус занятия</TableHead>
+                  <TableHead className="w-45">Трудности</TableHead>
                   <TableHead className="w-12 text-right">
                     <span className="sr-only">Открыть</span>
                   </TableHead>
@@ -134,24 +126,10 @@ export function LessonReportsList({
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="truncate">{report.lessonPlan}</div>
+                      <div className="truncate">{report.lessonFocus}</div>
                     </TableCell>
                     <TableCell>
-                      <div className="truncate">
-                        {formatUncompletedPlannedWork(
-                          report.uncompletedPlannedWork,
-                        )}
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-center">
-                      <div className="truncate">
-                        {formatUnderstandingLevel(report.understandingLevel)}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="truncate">
-                        {formatHomeworkStatus(report.homeworkStatus)}
-                      </div>
+                      <div className="truncate">{report.difficulties}</div>
                     </TableCell>
                     <TableCell className="pr-2 text-right">
                       <Button

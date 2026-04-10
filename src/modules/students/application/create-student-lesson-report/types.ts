@@ -1,18 +1,12 @@
 import type { LessonReport } from "@/modules/students/domain/lesson-report";
-import type { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import type { HomeworkStatus } from "@/modules/students/domain/homework-status";
 import { CreateStudentLessonReportResultKind } from "./constants";
 
 export type CreateStudentLessonReportInput = {
   teacherUserId: string;
   studentId: string;
   lessonAt: string;
-  lessonPlan: string;
-  uncompletedPlannedWork: string | null;
-  understandingLevel: UnderstandingLevel;
-  whatWentWell: string | null;
-  difficulties: string | null;
-  homeworkStatus: HomeworkStatus;
+  lessonFocus: string;
+  difficulties: string;
   teacherComment: string | null;
 };
 

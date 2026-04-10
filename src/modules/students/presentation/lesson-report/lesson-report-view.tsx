@@ -5,11 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/shared/ui/components/card";
-import {
-  formatHomeworkStatus,
-  formatOptionalText,
-  formatUnderstandingLevel,
-} from "@/modules/students/shared/format";
+import { formatOptionalText } from "@/modules/students/shared/format";
 import { format, parseISO } from "date-fns";
 import { ru } from "date-fns/locale";
 
@@ -31,48 +27,20 @@ export function LessonReportView({ lessonReport }: Props) {
       <CardContent>
         <dl className="flex flex-col gap-4">
           <div className="space-y-1">
-            <dt className="text-muted-foreground">План занятия:</dt>
+            <dt className="text-muted-foreground">
+              Что проходили или отрабатывали на уроке?
+            </dt>
             <dd className="[overflow-wrap:anywhere]">
-              {lessonReport.lessonPlan}
+              {lessonReport.lessonFocus}
             </dd>
           </div>
 
           <div className="space-y-1">
             <dt className="text-muted-foreground">
-              Из запланированного не успели пройти:
+              Что вызвало трудности у ученика?
             </dt>
-            <dd className="[overflow-wrap:anywhere]">
-              {formatOptionalText(lessonReport.uncompletedPlannedWork)}
-            </dd>
-          </div>
-
-          <div className="space-y-1">
-            <dt className="text-muted-foreground">Делает уверенно:</dt>
-            <dd className="[overflow-wrap:anywhere]">
-              {formatOptionalText(lessonReport.whatWentWell)}
-            </dd>
-          </div>
-
-          <div className="space-y-1">
-            <dt className="text-muted-foreground">Трудности:</dt>
             <dd className="[overflow-wrap:anywhere]">
               {formatOptionalText(lessonReport.difficulties)}
-            </dd>
-          </div>
-
-          <div className="space-y-1">
-            <dt className="text-muted-foreground">
-              Уровень понимания на данном занятии:
-            </dt>
-            <dd className="[overflow-wrap:anywhere]">
-              {formatUnderstandingLevel(lessonReport.understandingLevel)}
-            </dd>
-          </div>
-
-          <div className="space-y-1">
-            <dt className="text-muted-foreground">Статус домашней работы:</dt>
-            <dd className="[overflow-wrap:anywhere]">
-              {formatHomeworkStatus(lessonReport.homeworkStatus)}
             </dd>
           </div>
 

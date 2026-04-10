@@ -1,7 +1,5 @@
 import z from "zod";
 import { optionalNullableTextField } from "@/shared/lib/validation/optional-nullable-text-field";
-import { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import { HomeworkStatus } from "@/modules/students/domain/homework-status";
 
 export const createStudentRequestSchema = z.object({
   fullName: z.string().trim().min(1).max(100),
@@ -13,11 +11,7 @@ export const createStudentRequestSchema = z.object({
 
 export const createStudentLessonReportRequestSchema = z.object({
   lessonAt: z.iso.date(),
-  lessonPlan: z.string().trim().min(1).max(2000),
-  uncompletedPlannedWork: optionalNullableTextField(2000),
-  understandingLevel: z.enum(UnderstandingLevel),
-  whatWentWell: optionalNullableTextField(2000),
-  difficulties: optionalNullableTextField(2000),
-  homeworkStatus: z.enum(HomeworkStatus),
+  lessonFocus: z.string().trim().min(1).max(2000),
+  difficulties: z.string().trim().min(1).max(2000),
   teacherComment: optionalNullableTextField(2000),
 });

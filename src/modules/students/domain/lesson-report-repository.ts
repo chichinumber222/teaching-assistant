@@ -1,16 +1,10 @@
 import type { LessonReport } from "./lesson-report";
-import type { UnderstandingLevel } from "./understanding-level";
-import type { HomeworkStatus } from "./homework-status";
 
 export type CreateLessonReportData = {
   studentId: string;
   lessonAt: string;
-  lessonPlan: string;
-  uncompletedPlannedWork: string | null;
-  understandingLevel: UnderstandingLevel;
-  whatWentWell: string | null;
-  difficulties: string | null;
-  homeworkStatus: HomeworkStatus;
+  lessonFocus: string;
+  difficulties: string;
   teacherComment: string | null;
 };
 

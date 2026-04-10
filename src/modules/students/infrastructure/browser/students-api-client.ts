@@ -1,6 +1,4 @@
 import { HttpClient } from "@/shared/lib/http/http-client";
-import { UnderstandingLevel } from "@/modules/students/domain/understanding-level";
-import { HomeworkStatus } from "@/modules/students/domain/homework-status";
 
 export type CreateStudentRequestDto = {
   fullName: string;
@@ -24,12 +22,8 @@ export type CreateStudentResponseDto = {
 
 export type CreateLessonReportRequestDto = {
   lessonAt: string;
-  lessonPlan: string;
-  uncompletedPlannedWork: string | null;
-  understandingLevel: UnderstandingLevel;
-  whatWentWell: string | null;
-  difficulties: string | null;
-  homeworkStatus: HomeworkStatus;
+  lessonFocus: string;
+  difficulties: string;
   teacherComment: string | null;
 };
 
@@ -37,12 +31,8 @@ export type CreateLessonReportResponseDto = {
   id: string;
   studentId: string;
   lessonAt: string;
-  lessonPlan: string;
-  uncompletedPlannedWork: string | null;
-  understandingLevel: UnderstandingLevel;
-  whatWentWell: string | null;
-  difficulties: string | null;
-  homeworkStatus: HomeworkStatus;
+  lessonFocus: string;
+  difficulties: string;
   teacherComment: string | null;
   createdAt: string;
   updatedAt: string;
