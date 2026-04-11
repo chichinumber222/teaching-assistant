@@ -1,6 +1,6 @@
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
-import { getCreateReportPageData } from "@/modules/students/infrastructure/server/get-create-report-page-data";
+import { getStudentViewData } from "@/modules/students/infrastructure/server/get-student-view-data";
 import { CreateReportView } from "@/modules/students/presentation/create-lesson-report/create-report-view";
 import { NotFound } from "@/shared/ui/components/not-found";
 import { PageFallback } from "@/shared/ui/components/page-fallback";
@@ -13,16 +13,16 @@ type Props = {
 export default async function CreateReportPage({ params }: Props) {
   const teacher = await requireRole(UserRole.Teacher);
   const { studentId } = await params;
-  const pageData = getCreateReportPageData({
+  const viewData = getStudentViewData({
     teacherId: teacher.id,
     studentId,
   });
 
   return (
     <BasePage>
-      {pageData.ok ? (
-        <CreateReportView studentId={pageData.student.id} />
-      ) : pageData.reason === "not_found" ? (
+      {viewData.ok ? (
+        <CreateReportView studentId={viewData.student.id} />
+      ) : viewData.reason === "not_found" ? (
         <NotFound />
       ) : (
         <PageFallback />

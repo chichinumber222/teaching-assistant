@@ -4,12 +4,12 @@ import { buildStudentsServices } from "@/modules/students/composition/build-stud
 import { GetStudentResultKind } from "@/modules/students/application/get-student/constants";
 import type { Student } from "@/modules/students/domain/student";
 
-type GetCreateReportPageDataInput = {
+type GetStudentViewDataInput = {
   teacherId: string;
   studentId: string;
 };
 
-type GetCreateReportPageDataResult =
+type GetStudentViewDataResult =
   | {
       ok: true;
       student: Student;
@@ -24,10 +24,10 @@ type GetCreateReportPageDataResult =
       message: string;
     };
 
-export function getCreateReportPageData({
+export function getStudentViewData({
   teacherId,
   studentId,
-}: GetCreateReportPageDataInput): GetCreateReportPageDataResult {
+}: GetStudentViewDataInput): GetStudentViewDataResult {
   try {
     const { getStudent } = buildStudentsServices();
 
@@ -57,13 +57,13 @@ export function getCreateReportPageData({
     return {
       ok: false,
       reason: "error",
-      message: "Не удалось загрузить страницу создания карточки занятия.",
+      message: "Не удалось загрузить данные студента.",
     };
   } catch {
     return {
       ok: false,
       reason: "error",
-      message: "Не удалось загрузить страницу создания карточки занятия.",
+      message: "Не удалось загрузить данные студента.",
     };
   }
 }

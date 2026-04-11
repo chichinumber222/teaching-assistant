@@ -1,6 +1,6 @@
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { requireRole } from "@/modules/auth/infrastructure/server/auth-access";
-import { getLessonReportPageData } from "@/modules/students/infrastructure/server/get-lesson-report-page-data";
+import { getLessonReportViewData } from "@/modules/students/infrastructure/server/get-lesson-report-view-data";
 import { LessonReportView } from "@/modules/students/presentation/lesson-report/lesson-report-view";
 import { NotFound } from "@/shared/ui/components/not-found";
 import { PageFallback } from "@/shared/ui/components/page-fallback";
@@ -16,7 +16,7 @@ type Props = {
 export default async function LessonReportPage({ params }: Props) {
   const teacher = await requireRole(UserRole.Teacher);
   const { studentId, lessonReportId } = await params;
-  const pageData = await getLessonReportPageData({
+  const viewData = getLessonReportViewData({
     teacherId: teacher.id,
     studentId,
     lessonReportId,
@@ -24,9 +24,9 @@ export default async function LessonReportPage({ params }: Props) {
 
   return (
     <BasePage>
-      {pageData.ok ? (
-        <LessonReportView lessonReport={pageData.lessonReport} />
-      ) : pageData.reason === "not_found" ? (
+      {viewData.ok ? (
+        <LessonReportView lessonReport={viewData.lessonReport} />
+      ) : viewData.reason === "not_found" ? (
         <NotFound />
       ) : (
         <PageFallback />

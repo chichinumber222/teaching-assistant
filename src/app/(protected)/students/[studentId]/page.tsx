@@ -16,7 +16,7 @@ type StudentsIdPageProps = {
 export default async function StudentsIdPage({ params }: StudentsIdPageProps) {
   const teacher = await requireRole(UserRole.Teacher);
   const { studentId } = await params;
-  const viewData = await getStudentDossierViewData({
+  const viewData = getStudentDossierViewData({
     teacherId: teacher.id,
     studentId,
   });

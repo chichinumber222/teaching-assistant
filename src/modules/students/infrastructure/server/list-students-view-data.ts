@@ -4,11 +4,11 @@ import { buildStudentsServices } from "@/modules/students/composition/build-stud
 import { ListStudentsResultKind } from "@/modules/students/application/list-students/constants";
 import type { Student } from "@/modules/students/domain/student";
 
-type GetStudentsPageDataInput = {
+type ListStudentsViewDataInput = {
   teacherId: string;
 };
 
-type GetStudentsPageDataResult =
+type ListStudentsViewDataResult =
   | {
       ok: true;
       students: Student[];
@@ -17,9 +17,9 @@ type GetStudentsPageDataResult =
       ok: false;
     };
 
-export function getStudentsPageData({
+export function listStudentsViewData({
   teacherId,
-}: GetStudentsPageDataInput): GetStudentsPageDataResult {
+}: ListStudentsViewDataInput): ListStudentsViewDataResult {
   try {
     const { listStudents } = buildStudentsServices();
 

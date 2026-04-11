@@ -4,13 +4,13 @@ import { buildStudentsServices } from "@/modules/students/composition/build-stud
 import { GetLessonReportResultKind } from "@/modules/students/application/get-lesson-report/constants";
 import type { LessonReport } from "@/modules/students/domain/lesson-report";
 
-type GetLessonReportPageDataInput = {
+type GetLessonReportViewDataInput = {
   teacherId: string;
   studentId: string;
   lessonReportId: string;
 };
 
-type GetLessonReportPageDataResult =
+type GetLessonReportViewDataResult =
   | {
       ok: true;
       lessonReport: LessonReport;
@@ -25,11 +25,11 @@ type GetLessonReportPageDataResult =
       message: string;
     };
 
-export function getLessonReportPageData({
+export function getLessonReportViewData({
   teacherId,
   studentId,
   lessonReportId,
-}: GetLessonReportPageDataInput): GetLessonReportPageDataResult {
+}: GetLessonReportViewDataInput): GetLessonReportViewDataResult {
   try {
     const { getLessonReport } = buildStudentsServices();
 
