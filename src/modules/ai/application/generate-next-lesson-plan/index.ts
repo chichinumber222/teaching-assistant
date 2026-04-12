@@ -14,7 +14,7 @@ import { buildPrompt } from "./lib/build-prompt";
 import { buildAlternativesPrompt } from "./lib/build-alternatives-prompt";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
 
-const LESSON_REPORTS_LIMIT = 3;
+const LESSON_REPORTS_LIMIT = 5;
 const MAX_TOKENS_TO_GENERATE = 800;
 
 export class GenerateNextLessonPlan {

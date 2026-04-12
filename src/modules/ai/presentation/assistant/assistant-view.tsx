@@ -166,6 +166,7 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
                   key={operation.kind}
                   variant="outline"
                   onClick={() => hanfleGenerate(operation.kind)}
+                  disabled={isGlobalLoading}
                 >
                   {operation.title}
                 </Button>

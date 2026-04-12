@@ -21,7 +21,7 @@ export function StudentView({
       {studentPageAction ? (
         <div className="flex flex-col gap-4 md:flex-row">
           <StudentProfile student={student} className="flex-1" />
-          <div className="md:w-50 flex md:items-stretch">
+          <div className="md:w-54 flex md:items-stretch">
             {studentPageAction}
           </div>
         </div>
