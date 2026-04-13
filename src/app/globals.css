@@ -185,6 +185,7 @@
 
   html {
     @apply h-full;
+    scrollbar-gutter: stable;
   }
 
   body {

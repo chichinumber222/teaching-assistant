@@ -6,6 +6,7 @@ import axios from "axios";
 import { RegisterRequestDto } from "@/modules/auth/infrastructure/browser/auth-api-client";
 import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
 import { getEntryPath } from "@/modules/auth/shared/redirects";
+import { mapPasswordPolicyError } from "@/modules/auth/shared/map-password-policy-errors";
 
 type UseRegisterResult = {
   register: (payload: RegisterRequestDto) => Promise<boolean>;
@@ -37,11 +38,21 @@ export function useRegister(): UseRegisterResult {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
+        const message = error.response?.data?.message;
 
-        if (status === 409) {
+        if (status === 400) {
+          if (message && message === "invalid_password") {
+            const reason = error.response?.data?.reason;
+            setGlobalError(
+              reason
+                ? mapPasswordPolicyError(reason)
+                : "Проверьте введенные данные",
+            );
+          } else {
+            setGlobalError("Проверьте введенные данные");
+          }
+        } else if (status === 409) {
           setGlobalError("Пользователь с таким email уже существует");
-        } else if (status === 400) {
-          setGlobalError("Проверьте введенные данные");
         } else if (status === 403) {
           setGlobalError("Регистрация временно недоступна");
         } else {

@@ -40,10 +40,28 @@ export async function POST(request: NextRequest) {
       role: UserRole.Teacher,
     });
 
+    if (result.kind === RegisterUserResultKind.INVALID_NAME) {
+      return NextResponse.json({ message: "Invalid name" }, { status: 400 });
+    }
+
+    if (result.kind === RegisterUserResultKind.INVALID_EMAIL) {
+      return NextResponse.json({ message: "Invalid email" }, { status: 400 });
+    }
+
     if (result.kind === RegisterUserResultKind.EMAIL_ALREADY_IN_USE) {
       return NextResponse.json(
         { message: "Email already in use" },
         { status: 409 },
+      );
+    }
+
+    if (result.kind === RegisterUserResultKind.INVALID_PASSWORD) {
+      return NextResponse.json(
+        {
+          message: 'invalid_password',
+          reason: result.reason,
+        },
+        { status: 400 },
       );
     }
 

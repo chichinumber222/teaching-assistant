@@ -19,10 +19,9 @@ export const registerSchema = z
       ),
     password: z
       .string()
-      .trim()
-      .min(6, { message: "Пароль должен содержать минимум 6 символов" })
-      .max(100, { message: "Пароль не может превышать 100 символов" }),
-    confirmPassword: z.string().trim(),
+      .min(8, { message: "Пароль должен содержать минимум 8 символов" })
+      .max(128, { message: "Пароль не может превышать 128 символов" }),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "Пароли не совпадают",

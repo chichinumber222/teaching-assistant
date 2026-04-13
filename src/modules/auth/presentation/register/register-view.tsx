@@ -17,7 +17,11 @@ export function RegisterView() {
       </CardHeader>
       <CardContent>
         <RegisterForm />
-        <AuthLink href={APP_ROUTES.login} message="Уже есть аккаунт?">
+        <AuthLink
+          href={APP_ROUTES.login}
+          message="Уже есть аккаунт?"
+          containerClassName="mt-6"
+        >
           Войти
         </AuthLink>
       </CardContent>

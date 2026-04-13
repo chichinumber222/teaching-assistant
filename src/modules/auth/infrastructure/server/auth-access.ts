@@ -9,7 +9,29 @@ import { UserRole } from "@/modules/auth/domain/user-role";
 import { getStartPath, getEntryPath } from "@/modules/auth/shared/redirects";
 import { User } from "@/modules/auth/domain/user";
 
-async function getUser(): Promise<User | null> {
+type AuthenticatedUser = {
+  id: string;
+  name: string;
+  email: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+};
+
+const mapUserToAuthenticatedUser = (
+  user: User,
+): AuthenticatedUser  => ({
+  id: user.id,
+  name: user.name,
+  email: user.email,
+  role: user.role,
+  isActive: user.isActive,
+  createdAt: user.createdAt,
+  updatedAt: user.updatedAt,
+});
+
+async function getAuthenticatedUser(): Promise<AuthenticatedUser | null> {
   const cookieStore = await cookies();
   const sessionId = cookieStore.get(AUTH_SESSION_COOKIE_NAME)?.value;
 
@@ -24,11 +46,13 @@ async function getUser(): Promise<User | null> {
     return null;
   }
 
-  return result.user;
+  return mapUserToAuthenticatedUser(result.user);
 }
 
-export async function requireRole(requiredRole: UserRole): Promise<User> {
-  const user = await getUser();
+export async function requireRole(
+  requiredRole: UserRole,
+): Promise<AuthenticatedUser> {
+  const user = await getAuthenticatedUser();
 
   if (!user) {
     redirect(getEntryPath());
@@ -42,7 +66,7 @@ export async function requireRole(requiredRole: UserRole): Promise<User> {
 }
 
 export async function requireGuest(): Promise<void> {
-  const user = await getUser();
+  const user = await getAuthenticatedUser();
 
   if (user) {
     redirect(getStartPath(user.role));

@@ -12,6 +12,16 @@ export type LoginRequestDto = {
   password: string;
 };
 
+export type UpdateCurrentUserRequestDto = {
+  name: string;
+  email: string;
+};
+
+export type UpdatePasswordRequestDto = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 export type AuthResponseDto = {
   user: {
     id: string;
@@ -58,6 +68,27 @@ export class AuthApiClient {
     return this.httpClient.request<CurrentUserResponseDto>({
       method: "GET",
       url: "/api/auth/me",
+    });
+  }
+
+  async updateCurrentUser(
+    payload: UpdateCurrentUserRequestDto,
+  ): Promise<CurrentUserResponseDto> {
+    return this.httpClient.request<
+      CurrentUserResponseDto,
+      UpdateCurrentUserRequestDto
+    >({
+      method: "PATCH",
+      url: "/api/auth/me",
+      body: payload,
+    });
+  }
+
+  async updatePassword(payload: UpdatePasswordRequestDto): Promise<void> {
+    await this.httpClient.request<void, UpdatePasswordRequestDto>({
+      method: "PATCH",
+      url: "/api/auth/me/password",
+      body: payload,
     });
   }
 }

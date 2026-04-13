@@ -1,7 +1,7 @@
 export const APP_ROUTE_PATTERNS = {
   login: "/login",
   register: "/register",
-  profile: "/profile",
+  account: "/account",
   admin: "/admin",
 
   students: "/students",
@@ -15,7 +15,7 @@ export const APP_ROUTE_PATTERNS = {
 export const APP_ROUTES = {
   login: APP_ROUTE_PATTERNS.login,
   register: APP_ROUTE_PATTERNS.register,
-  profile: APP_ROUTE_PATTERNS.profile,
+  account: APP_ROUTE_PATTERNS.account,
   admin: APP_ROUTE_PATTERNS.admin,
 
   students: APP_ROUTE_PATTERNS.students,
@@ -46,7 +46,7 @@ export const GUEST_ROUTES = [
 ] as const;
 
 export const TEACHER_ROLE_ROUTES = [
-  APP_ROUTE_PATTERNS.profile,
+  APP_ROUTE_PATTERNS.account,
   APP_ROUTE_PATTERNS.students,
   APP_ROUTE_PATTERNS.student,
   APP_ROUTE_PATTERNS.studentsNew,

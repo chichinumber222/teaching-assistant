@@ -17,7 +17,11 @@ export function LoginView() {
       </CardHeader>
       <CardContent>
         <LoginForm />
-        <AuthLink href={APP_ROUTES.register} message="Нет аккаунта?">
+        <AuthLink
+          href={APP_ROUTES.register}
+          message="Нет аккаунта?"
+          containerClassName="mt-6"
+        >
           Зарегистрироваться
         </AuthLink>
       </CardContent>

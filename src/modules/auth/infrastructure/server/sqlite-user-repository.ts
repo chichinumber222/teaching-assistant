@@ -3,6 +3,7 @@ import { db } from "@/server/db/client";
 
 import type {
   CreateUserData,
+  UpdateUserData,
   UserRepository,
 } from "@/modules/auth/domain/user-repository";
 import type { User } from "@/modules/auth/domain/user";
@@ -90,5 +91,34 @@ export class SqliteUserRepository implements UserRepository {
       createdAt: now,
       updatedAt: now,
     };
+  }
+
+  update(userId: string, data: UpdateUserData): boolean {
+    const now = new Date().toISOString();
+    const statement = db.prepare(
+      `UPDATE users
+       SET
+         name = ?,
+         email = ?,
+         updated_at = ?
+       WHERE id = ?`,
+    );
+    const result = statement.run(data.name, data.email, now, userId);
+
+    return result.changes > 0;
+  }
+
+  updatePassword(userId: string, passwordHash: string): boolean {
+    const now = new Date().toISOString();
+    const statement = db.prepare(
+      `UPDATE users
+       SET
+         password_hash = ?,
+         updated_at = ?
+       WHERE id = ?`,
+    );
+    const result = statement.run(passwordHash, now, userId);
+
+    return result.changes > 0;
   }
 }

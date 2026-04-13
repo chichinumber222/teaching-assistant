@@ -1,5 +1,6 @@
 import { UserRole } from "@/modules/auth/domain/user-role";
 import { User } from "@/modules/auth/domain/user";
+import { PasswordPolicyError } from "@/modules/auth/domain/password-policy";
 import { RegisterUserResultKind } from "./constants";
 
 export type RegisterUserInput = {
@@ -15,5 +16,15 @@ export type RegisterUserResult =
       user: User;
     }
   | {
+      kind: RegisterUserResultKind.INVALID_NAME;
+    }
+  | {
+      kind: RegisterUserResultKind.INVALID_EMAIL;
+    }
+  | {
       kind: RegisterUserResultKind.EMAIL_ALREADY_IN_USE;
+    }
+  | {
+      kind: RegisterUserResultKind.INVALID_PASSWORD;
+      reason: PasswordPolicyError;
     };
