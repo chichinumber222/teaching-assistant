@@ -26,6 +26,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/shared/ui/components/table";
+import { ItemActionsMenu, TableActionsMenu } from "./student-menu";
 
 type StudentsListProps = {
   students: Student[];
@@ -33,7 +34,7 @@ type StudentsListProps = {
 
 export function StudentsList({ students }: StudentsListProps) {
   return (
-    <Card size="sm" className="w-full shadow-sm bg-card">
+    <Card size="sm" className="w-full bg-card shadow-sm">
       <CardHeader>
         <CardTitle>Ученики</CardTitle>
         <CardDescription>Список всех ваших учеников.</CardDescription>
@@ -41,7 +42,7 @@ export function StudentsList({ students }: StudentsListProps) {
 
       <CardContent>
         {students.length === 0 ? (
-          <div className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground bg-table">
+          <div className="rounded-lg border border-dashed bg-table px-4 py-8 text-center text-sm text-muted-foreground">
             У вас пока нет учеников.
           </div>
         ) : (
@@ -51,7 +52,7 @@ export function StudentsList({ students }: StudentsListProps) {
                 <Item
                   key={student.id}
                   size="sm"
-                  className="rounded-none border-b border-border bg-transparent pr-2 last:border-b-0 first:border-t-0"
+                  className="rounded-none border-b border-border bg-transparent pr-2 first:border-t-0 last:border-b-0"
                 >
                   <Link
                     href={APP_ROUTES.student(student.id)}
@@ -68,15 +69,7 @@ export function StudentsList({ students }: StudentsListProps) {
                     </ItemContent>
                   </Link>
                   <ItemActions className="shrink-0">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon-sm"
-                      className="text-muted-foreground hover:bg-muted hover:text-foreground"
-                      aria-label={`Действия для ${student.fullName}`}
-                    >
-                      <span aria-hidden="true">⋮</span>
-                    </Button>
+                    <ItemActionsMenu student={student} />
                   </ItemActions>
                 </Item>
               ))}
@@ -99,6 +92,7 @@ export function StudentsList({ students }: StudentsListProps) {
                   </TableHead>
                 </TableRow>
               </TableHeader>
+
               <TableBody>
                 {students.map((student) => (
                   <TableRow key={student.id} className="hover:bg-muted/20">
@@ -113,23 +107,13 @@ export function StudentsList({ students }: StudentsListProps) {
                     </TableCell>
                     <TableCell>
                       <Button asChild variant="link" size="sm">
-                        <Link
-                          href={APP_ROUTES.student(student.id)}
-                        >
+                        <Link href={APP_ROUTES.student(student.id)}>
                           Перейти
                         </Link>
                       </Button>
                     </TableCell>
                     <TableCell className="pr-2 text-right">
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-sm"
-                        className="text-muted-foreground hover:bg-muted hover:text-foreground"
-                        aria-label={`Действия для ${student.fullName}`}
-                      >
-                        <span aria-hidden="true">⋮</span>
-                      </Button>
+                      <TableActionsMenu student={student} />
                     </TableCell>
                   </TableRow>
                 ))}
