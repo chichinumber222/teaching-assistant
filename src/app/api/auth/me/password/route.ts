@@ -4,6 +4,7 @@ import { ChangePasswordResultKind } from "@/modules/auth/application/change-pass
 import { AUTH_SESSION_COOKIE_NAME } from "@/modules/auth/shared/auth-cookie";
 import { buildAuthServices } from "@/modules/auth/composition/build-auth-services";
 import { updatePasswordRequestSchema } from "@/modules/auth/infrastructure/server/auth-schemes";
+import { mapPasswordPolicyErrorCodeToPasswordReasonErrorCode } from "@/modules/auth/infrastructure/server/map-password-policy-error-code-to-password-reason-code";
 import { unauthorizedResponseWithCookieDeletion } from "@/app/api/_lib/auth/unauthorized-response";
 import { verifySameOrigin } from "@/app/api/_lib/http/verify-same-origin";
 import { parseJson } from "@/app/api/_lib/shared/parse-json";
@@ -32,15 +33,26 @@ export async function PATCH(request: NextRequest) {
     const json = await parseJson(request);
     if (!json.ok) {
       return NextResponse.json(
-        { message: "Invalid request body" },
+        {
+          message: "Invalid request body",
+          reason: {
+            code: "auth.invalid_parsed_json",
+          },
+        },
         { status: 400 },
       );
     }
 
     const parsedBody = updatePasswordRequestSchema.safeParse(json.data);
+    
     if (!parsedBody.success) {
       return NextResponse.json(
-        { message: "Invalid request body" },
+        {
+          message: "Invalid request body",
+          reason: {
+            code: "auth.invalid_validation",
+          },
+        },
         { status: 400 },
       );
     }
@@ -63,14 +75,27 @@ export async function PATCH(request: NextRequest) {
     }
     if (result.kind === ChangePasswordResultKind.INVALID_CURRENT_PASSWORD) {
       return NextResponse.json(
-        { message: "invalid_current_password" },
+        {
+          message: "Invalid request body",
+          reason: {
+            code: "auth.invalid_current_password",
+          },
+        },
         { status: 400 },
       );
     }
 
     if (result.kind === ChangePasswordResultKind.INVALID_NEW_PASSWORD) {
       return NextResponse.json(
-        { message: "invalid_password", reason: result.reason },
+        {
+          message: "Invalid request body",
+          reason: {
+            code: "auth.invalid_password",
+            details: mapPasswordPolicyErrorCodeToPasswordReasonErrorCode(
+              result.reason.code,
+            ),
+          },
+        },
         { status: 400 },
       );
     }

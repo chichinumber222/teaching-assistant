@@ -6,7 +6,7 @@ import axios from "axios";
 import { RegisterRequestDto } from "@/modules/auth/infrastructure/browser/auth-api-client";
 import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
 import { getEntryPath } from "@/modules/auth/shared/redirects";
-import { mapPasswordPolicyError } from "@/modules/auth/shared/map-password-policy-errors";
+import { mapPasswordReasonErrorCodeToMessage } from "../shared/map-password-reason-code-to-message";
 
 type UseRegisterResult = {
   register: (payload: RegisterRequestDto) => Promise<boolean>;
@@ -38,16 +38,14 @@ export function useRegister(): UseRegisterResult {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
-        const message = error.response?.data?.message;
+        const reason = error.response?.data?.reason;
 
         if (status === 400) {
-          if (message && message === "invalid_password") {
-            const reason = error.response?.data?.reason;
-            setGlobalError(
-              reason
-                ? mapPasswordPolicyError(reason)
-                : "Проверьте введенные данные",
-            );
+          if (reason?.code && reason.code === "auth.invalid_password") {
+            const details = error.response?.data?.reason?.details;
+            if (details) {
+              setGlobalError(mapPasswordReasonErrorCodeToMessage(details));
+            } else setGlobalError("Проверьте введенные данные");
           } else {
             setGlobalError("Проверьте введенные данные");
           }

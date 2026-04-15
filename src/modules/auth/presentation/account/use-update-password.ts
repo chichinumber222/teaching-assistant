@@ -4,7 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { authClient } from "@/modules/auth/infrastructure/browser/auth-client";
 import type { UpdatePasswordRequestDto } from "@/modules/auth/infrastructure/browser/auth-api-client";
-import { mapPasswordPolicyError } from "@/modules/auth/shared/map-password-policy-errors";
+import { mapPasswordReasonErrorCodeToMessage } from "../shared/map-password-reason-code-to-message";
 
 type UseUpdatePasswordResult = {
   updatePassword: (payload: UpdatePasswordRequestDto) => Promise<boolean>;
@@ -37,24 +37,24 @@ export function useUpdatePassword(): UseUpdatePasswordResult {
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
+        const reason = error.response?.data?.reason;
 
-        if (status === 403) {
-          setGlobalError("Обновление пароля временно недоступно");
-        } else if (status === 400) {
-          const message = error.response?.data?.message;
-
-          if (message && message === "invalid_password") {
-            const reason = error.response?.data?.reason;
-            setGlobalError(
-              reason
-                ? mapPasswordPolicyError(reason)
-                : "Проверьте введенные данные",
-            );
-          } else if (message && message === "invalid_current_password") {
+        if (status === 400) {
+          if (reason?.code && reason.code === "auth.invalid_password") {
+            const details = error.response?.data?.reason?.details;
+            if (details) {
+              setGlobalError(mapPasswordReasonErrorCodeToMessage(details));
+            } else setGlobalError("Проверьте введенные данные");
+          } else if (
+            reason?.code &&
+            reason.code === "auth.invalid_current_password"
+          ) {
             setGlobalError("Текущий пароль указан неверно");
           } else {
             setGlobalError("Проверьте введенные данные");
           }
+        } else if (status === 403) {
+          setGlobalError("Смена пароля временно недоступна, попробуйте позже");
         } else if (status === 401) {
           setGlobalError("Сессия истекла. Войдите снова");
         } else if (status === 404) {

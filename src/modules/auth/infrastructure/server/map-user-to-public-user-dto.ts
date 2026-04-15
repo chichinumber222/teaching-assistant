@@ -1,5 +1,5 @@
 import type { UserRole } from "@/modules/auth/domain/user-role";
-import { User } from "../../domain/user"
+import { User } from "@/modules/auth/domain/user"
 
 export type PublicUserDto = {
   id: string;
