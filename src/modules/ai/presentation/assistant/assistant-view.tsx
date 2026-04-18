@@ -3,6 +3,10 @@
 import { useMemo } from "react";
 import { format, parseISO } from "date-fns";
 import { ru } from "date-fns/locale";
+import remarkGfm from "remark-gfm";
+import remarkMath from "remark-math";
+import rehypeKatex from "rehype-katex";
+import Markdown from "react-markdown";
 import {
   Card,
   CardContent,
@@ -30,11 +34,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/ui/components/tooltip";
-import Markdown from "react-markdown";
-import { markdownToPlainText } from "./lib/markdown-to-plain-text";
-import { IconCheck, IconCopy, IconDownload } from "@tabler/icons-react";
-import { useDownload } from "@/shared/ui/hooks/use-download-hook";
-import { useCopy } from "@/shared/ui/hooks/use-copy-hook";
 
 type AssistantViewProps = {
   student: Student;
@@ -51,10 +50,7 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
     globalError,
     clearResult,
     clearGlobalError,
-    selectedOperationKind,
   } = useAssistant();
-  const { download } = useDownload();
-  const { copied, copy } = useCopy();
 
   const usedReports = useMemo(
     () => reports.slice(0, LESSON_REPORTS_LIMIT),
@@ -65,27 +61,6 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
     clearResult();
     clearGlobalError();
     await generateAssistantResult(operationKind, student.id);
-  };
-
-  const handleDownload = () => {
-    if (!result) {
-      return;
-    }
-    const currentOperation = ASSISTANT_OPERATIONS.find(
-      (op) => op.kind === selectedOperationKind,
-    );
-
-    download(result, (value) => ({
-      content: markdownToPlainText(value),
-      fileName: `${currentOperation?.title || "Результат Ассистента"}.txt`,
-    }));
-  };
-
-  const handleCopy = () => {
-    if (!result) {
-      return;
-    }
-    copy(result, markdownToPlainText);
   };
 
   return (
@@ -126,25 +101,7 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
 
       <Card className="w-full bg-card">
         <CardHeader>
-          {result ? (
-            <div className="flex items-center justify-between">
-              <CardTitle>Результат</CardTitle>
-              <div className="flex gap-1">
-                <Button variant="outline" onClick={handleCopy}>
-                  {copied ? <IconCheck /> : <IconCopy />}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={handleDownload}
-                  className="ml-auto"
-                >
-                  <IconDownload className="mr-1.2" />
-                </Button>
-              </div>
-            </div>
-          ) : (
-            <CardTitle>Результат</CardTitle>
-          )}
+          <CardTitle>Результат</CardTitle>
           <CardDescription>Здесь появится ответ ИИ-ассистента.</CardDescription>
         </CardHeader>
         <CardContent>
@@ -154,7 +111,12 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
             )}
             {globalError && <p className="text-red-500">{globalError}</p>}
             <div className="prose">
-              <Markdown>{result}</Markdown>
+              <Markdown
+                remarkPlugins={[remarkGfm, remarkMath]}
+                rehypePlugins={[rehypeKatex]}
+              >
+                {result}
+              </Markdown>
             </div>
           </div>
         </CardContent>

@@ -2,41 +2,31 @@
 
 import { useState } from "react";
 
-export type DownloadTransformResult = {
-  content: string;
+export type PreparedFile = {
+  blob: Blob;
   fileName: string;
-  mimeType?: string;
 };
 
-export type DownloadTransform = (
-  value: string,
-) => DownloadTransformResult | Promise<DownloadTransformResult>;
+function triggerBrowserDownload(file: PreparedFile) {
+  const objectUrl = URL.createObjectURL(file.blob);
 
-const defaultFileName = "download.txt";
-const defaultMimeType = "text/plain;charset=utf-8";
+  const a = document.createElement("a");
+  a.href = objectUrl;
+  a.download = file.fileName;
+  a.click();
+
+  setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
+}
 
 export function useDownload() {
   const [isDownloading, setIsDownloading] = useState(false);
 
-  const download = async (input: string, transform?: DownloadTransform) => {
+  const download = async (file: PreparedFile) => {
     setIsDownloading(true);
+
     try {
-      const result = transform
-        ? await transform(input)
-        : { content: input, fileName: defaultFileName };
-      const mimeType = result.mimeType ?? defaultMimeType;
-
-      const blob = new Blob([result.content], { type: mimeType });
-      const objectUrl = URL.createObjectURL(blob);
-
-      const a = document.createElement("a");
-      a.href = objectUrl;
-      a.download = result.fileName;
-      a.click();
-
-      setTimeout(() => URL.revokeObjectURL(objectUrl), 0);
-
-      return result;
+      triggerBrowserDownload(file);
+      return file;
     } finally {
       setIsDownloading(false);
     }

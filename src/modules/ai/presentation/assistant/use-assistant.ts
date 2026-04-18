@@ -6,6 +6,7 @@ import { aiClient } from "@/modules/ai/infrastructure/browser/ai-client";
 import { GenerateResponseDto } from "@/modules/ai/infrastructure/browser/ai-api-client";
 import { AssistantOperationKind } from "./assistant-operations";
 import { NextLessonPlanMode } from "@/modules/ai/application/generate-next-lesson-plan/constants";
+import { PracticeMode } from "@/modules/ai/application/generate-practice/constants";
 
 type UseAssistantResult = {
   generateAssistantResult: (
@@ -57,6 +58,16 @@ export function useAssistant(): UseAssistantResult {
         case AssistantOperationKind.NextLessonPlanAlternatives:
           generatedResult = await aiClient.generateNextLessonPlan(studentId, {
             mode: NextLessonPlanMode.Alternatives,
+          });
+          break;
+        case AssistantOperationKind.Practice:
+          generatedResult = await aiClient.generatePractice(studentId, {
+            mode: PracticeMode.Standard,
+          });
+          break;
+        case AssistantOperationKind.PracticeAlternatives:
+          generatedResult = await aiClient.generatePractice(studentId, {
+            mode: PracticeMode.Alternatives,
           });
           break;
         default:

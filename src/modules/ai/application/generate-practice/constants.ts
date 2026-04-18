@@ -1,0 +1,11 @@
+export enum GeneratePracticeResultKind {
+  GENERATED = "GENERATED",
+  TEACHER_NOT_FOUND = "TEACHER_NOT_FOUND",
+  USER_IS_NOT_TEACHER = "USER_IS_NOT_TEACHER",
+  STUDENT_NOT_FOUND = "STUDENT_NOT_FOUND",
+}
+
+export enum PracticeMode {
+  Standard = "standard",
+  Alternatives = "alternatives",
+}

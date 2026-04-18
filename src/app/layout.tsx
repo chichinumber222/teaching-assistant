@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { TooltipProvider } from "@/shared/ui/components/tooltip";
 import "./globals.css";
+import "katex/dist/katex.min.css";
 
 const onestSans = localFont({
   src: "../shared/ui/assets/fonts/Onest-Variable.ttf",
