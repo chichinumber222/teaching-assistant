@@ -3,6 +3,7 @@ import { requireValue } from "@/shared/lib/validation/require-value";
 import { YandexLanguageModel } from "@/modules/ai/infrastructure/server/yandex-language-model";
 import { ConsoleLogger } from "@/shared/lib/logger/console-logger";
 import { LoggingLanguageModel } from "@/modules/ai/infrastructure/server/logging-language-model";
+import { SqliteNextLessonPlanRepository } from "@/modules/ai/infrastructure/server/sqlite-next-lesson-plan-repository";
 
 export function getAiDependencies() {
   const apiKey = requireValue(process.env.YANDEX_API_KEY, "YANDEX_API_KEY");
@@ -27,5 +28,7 @@ export function getAiDependencies() {
     new ConsoleLogger(),
   );
 
-  return { languageModel: loggingLanguageModel };
+  const nextLessonPlanRepository = new SqliteNextLessonPlanRepository();
+
+  return { languageModel: loggingLanguageModel, nextLessonPlanRepository };
 }

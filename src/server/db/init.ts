@@ -52,10 +52,23 @@ db.exec(`
     updated_at TEXT NOT NULL,
     FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
   );
+  CREATE TABLE IF NOT EXISTS next_lesson_plans (
+    id TEXT PRIMARY KEY,
+    student_id TEXT NOT NULL,
+    mode TEXT NOT NULL CHECK (mode IN ('standard', 'alternatives')),
+    content TEXT NOT NULL,
+    source_prompt TEXT NOT NULL,
+    created_at TEXT NOT NULL,
+    updated_at TEXT NOT NULL,
+    FOREIGN KEY (student_id) REFERENCES students(id) ON DELETE CASCADE
+  );
 
   CREATE INDEX IF NOT EXISTS idx_students_teacher_user_id
     ON students(teacher_user_id);
 
   CREATE INDEX IF NOT EXISTS idx_lesson_reports_student_id_lesson_at_created_at
     ON lesson_reports(student_id, lesson_at DESC, created_at DESC);
+
+  CREATE INDEX IF NOT EXISTS idx_next_lesson_plans_student_id_created_at
+    ON next_lesson_plans(student_id, created_at DESC);
 `);

@@ -1,9 +1,10 @@
-import { GeneratePracticeResultKind, type PracticeMode } from "./constants";
+import { GenerationMode } from "@/modules/ai/domain/generation-mode";
+import { GeneratePracticeResultKind } from "./constants";
 
 export type GeneratePracticeInput = {
   teacherUserId: string;
   studentId: string;
-  mode: PracticeMode;
+  mode: GenerationMode;
 };
 
 export type GeneratePracticeResult =

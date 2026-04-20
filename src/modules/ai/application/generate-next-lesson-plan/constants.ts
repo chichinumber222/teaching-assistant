@@ -4,8 +4,3 @@ export enum GenerateNextLessonPlanResultKind {
   USER_IS_NOT_TEACHER = "USER_IS_NOT_TEACHER",
   STUDENT_NOT_FOUND = "STUDENT_NOT_FOUND",
 }
-
-export enum NextLessonPlanMode {
-  Standard = "standard",
-  Alternatives = "alternatives",
-}

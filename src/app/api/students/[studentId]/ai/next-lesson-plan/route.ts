@@ -96,7 +96,13 @@ export async function POST(
       );
     }
 
-    return NextResponse.json({ text: result.text }, { status: 200 });
+    return NextResponse.json(
+      {
+        text: result.text,
+        planId: result.planId,
+      },
+      { status: 200 },
+    );
   } catch {
     return NextResponse.json(
       { message: "Internal server error" },

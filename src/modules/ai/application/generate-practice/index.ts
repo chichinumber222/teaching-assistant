@@ -3,9 +3,9 @@ import { LanguageModelMessageRole } from "@/modules/ai/domain/language-model";
 import type { GetStudentDossier } from "@/modules/students/application/get-student-dossier";
 import { GetStudentDossierResultKind } from "@/modules/students/application/get-student-dossier/constants";
 import type { GeneratePracticeInput, GeneratePracticeResult } from "./types";
-import { GeneratePracticeResultKind, PracticeMode } from "./constants";
-import { buildPrompt } from "./lib/build-prompt";
-import { buildAlternativesPrompt } from "./lib/build-alternatives-prompt";
+import { GeneratePracticeResultKind } from "./constants";
+import { buildPrompt } from "./lib/prompt";
+import { getTemperature } from "./lib/temperature";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
 
 const LESSON_REPORTS_LIMIT = 5;
@@ -45,13 +45,8 @@ export class GeneratePractice {
     }
 
     const dossierTextSnapshot = buildTextSnapshot(dossierResult.dossier);
-
-    const prompt =
-      input.mode === PracticeMode.Alternatives
-        ? buildAlternativesPrompt(dossierTextSnapshot)
-        : buildPrompt(dossierTextSnapshot);
-
-    const temperature = input.mode === PracticeMode.Alternatives ? 0.6 : 0.35;
+    const prompt = buildPrompt(dossierTextSnapshot, input.mode);
+    const temperature = getTemperature(input.mode);
 
     const result = await this.languageModel.generateText({
       messages: [

@@ -6,13 +6,11 @@ import type {
   GenerateNextLessonPlanInput,
   GenerateNextLessonPlanResult,
 } from "./types";
-import {
-  GenerateNextLessonPlanResultKind,
-  NextLessonPlanMode,
-} from "./constants";
-import { buildPrompt } from "./lib/build-prompt";
-import { buildAlternativesPrompt } from "./lib/build-alternatives-prompt";
+import { GenerateNextLessonPlanResultKind } from "./constants";
+import { getTemperature } from "./lib/temperature"
+import { buildPrompt } from "./lib/prompt";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
+import type { NextLessonPlanRepository } from "@/modules/ai/domain/next-lesson-plan-repository";
 
 const LESSON_REPORTS_LIMIT = 5;
 const MAX_TOKENS_TO_GENERATE = 800;
@@ -21,6 +19,7 @@ export class GenerateNextLessonPlan {
   constructor(
     private readonly getStudentDossier: GetStudentDossier,
     private readonly languageModel: LanguageModel,
+    private readonly nextLessonPlanRepository: NextLessonPlanRepository,
   ) {}
 
   async execute(
@@ -53,16 +52,10 @@ export class GenerateNextLessonPlan {
     }
 
     const dossierTextSnapshot = buildTextSnapshot(dossierResult.dossier);
+    const prompt = buildPrompt(dossierTextSnapshot, input.mode);
+    const temperature = getTemperature(input.mode)
 
-    const prompt =
-      input.mode === NextLessonPlanMode.Alternatives
-        ? buildAlternativesPrompt(dossierTextSnapshot)
-        : buildPrompt(dossierTextSnapshot);
-
-    const temperature =
-      input.mode === NextLessonPlanMode.Alternatives ? 0.7 : 0.35;
-
-    const result = await this.languageModel.generateText({
+    const generated = await this.languageModel.generateText({
       messages: [
         {
           role: LanguageModelMessageRole.User,
@@ -73,9 +66,17 @@ export class GenerateNextLessonPlan {
       maxTokens: MAX_TOKENS_TO_GENERATE,
     });
 
+    const savedPlan = this.nextLessonPlanRepository.create({
+      studentId: input.studentId,
+      mode: input.mode,
+      content: generated.text,
+      sourcePrompt: prompt,
+    });
+
     return {
       kind: GenerateNextLessonPlanResultKind.GENERATED,
-      text: result.text,
+      text: generated.text,
+      planId: savedPlan.id,
     };
   }
 }

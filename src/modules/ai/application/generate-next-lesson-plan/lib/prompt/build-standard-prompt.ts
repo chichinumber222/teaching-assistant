@@ -1,4 +1,4 @@
-export function buildPrompt(textSnapshot: string): string {
+export function buildStandardPrompt(textSnapshot: string): string {
   return [
     "Ты AI-помощник для репетитора.",
     "Твоя задача — предложить 1–2 разных по смыслу варианта следующего индивидуального занятия для конкретного ученика.",
