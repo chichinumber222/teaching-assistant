@@ -26,7 +26,8 @@ import {
 } from "@/shared/ui/components/item";
 import { Button } from "@/shared/ui/components/button";
 import {
-  ASSISTANT_OPERATIONS,
+  PRIMARY_ASSISTANT_OPERATIONS,
+  FOLLOW_UP_ASSISTANT_OPERATIONS,
   AssistantOperationKind,
 } from "./assistant-operations";
 import {
@@ -34,6 +35,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/ui/components/tooltip";
+import { Separator } from "@/shared/ui/components/separator";
 
 type AssistantViewProps = {
   student: Student;
@@ -50,6 +52,7 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
     globalError,
     clearResult,
     clearGlobalError,
+    selectedOperationKind,
   } = useAssistant();
 
   const usedReports = useMemo(
@@ -118,10 +121,35 @@ export function AssistantView({ student, reports }: AssistantViewProps) {
                 {result}
               </Markdown>
             </div>
+            {!!result &&
+              (selectedOperationKind ===
+                AssistantOperationKind.NextLessonPlan ||
+                selectedOperationKind ===
+                  AssistantOperationKind.NextLessonPlanAlternatives) && (
+                <div className="mt-10">
+                  {FOLLOW_UP_ASSISTANT_OPERATIONS.map((operation) => (
+                    <Tooltip key={operation.kind}>
+                      <TooltipTrigger asChild>
+                        <Button
+                          key={operation.kind}
+                          variant="secondary"
+                          onClick={() => hanfleGenerate(operation.kind)}
+                          disabled={isGlobalLoading}
+                        >
+                          {operation.title}
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent side="top">
+                        <p>{operation.description}</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  ))}
+                </div>
+              )}
           </div>
         </CardContent>
         <CardFooter className="flex-wrap gap-1.5">
-          {ASSISTANT_OPERATIONS.map((operation) => (
+          {PRIMARY_ASSISTANT_OPERATIONS.map((operation) => (
             <Tooltip key={operation.kind}>
               <TooltipTrigger asChild>
                 <Button

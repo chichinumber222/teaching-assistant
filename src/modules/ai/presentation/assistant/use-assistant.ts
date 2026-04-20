@@ -5,8 +5,7 @@ import axios from "axios";
 import { aiClient } from "@/modules/ai/infrastructure/browser/ai-client";
 import { GenerateResponseDto } from "@/modules/ai/infrastructure/browser/ai-api-client";
 import { AssistantOperationKind } from "./assistant-operations";
-import { NextLessonPlanMode } from "@/modules/ai/application/generate-next-lesson-plan/constants";
-import { PracticeMode } from "@/modules/ai/application/generate-practice/constants";
+import { GenerationMode } from "@/modules/ai/domain/generation-mode";
 
 type UseAssistantResult = {
   generateAssistantResult: (
@@ -14,11 +13,11 @@ type UseAssistantResult = {
     studentId: string,
   ) => Promise<boolean>;
   result: string | null;
-  selectedOperationKind: AssistantOperationKind | null;
-  globalError: string | null;
-  isGlobalLoading: boolean;
-  clearGlobalError: () => void;
   clearResult: () => void;
+  globalError: string | null;
+  clearGlobalError: () => void;
+  isGlobalLoading: boolean;
+  selectedOperationKind: AssistantOperationKind | null;
 };
 
 export function useAssistant(): UseAssistantResult {
@@ -52,22 +51,32 @@ export function useAssistant(): UseAssistantResult {
       switch (operationKind) {
         case AssistantOperationKind.NextLessonPlan:
           generatedResult = await aiClient.generateNextLessonPlan(studentId, {
-            mode: NextLessonPlanMode.Standard,
+            mode: GenerationMode.Standard,
           });
           break;
         case AssistantOperationKind.NextLessonPlanAlternatives:
           generatedResult = await aiClient.generateNextLessonPlan(studentId, {
-            mode: NextLessonPlanMode.Alternatives,
+            mode: GenerationMode.Alternatives,
           });
           break;
         case AssistantOperationKind.Practice:
           generatedResult = await aiClient.generatePractice(studentId, {
-            mode: PracticeMode.Standard,
+            mode: GenerationMode.Standard,
           });
           break;
         case AssistantOperationKind.PracticeAlternatives:
           generatedResult = await aiClient.generatePractice(studentId, {
-            mode: PracticeMode.Alternatives,
+            mode: GenerationMode.Alternatives,
+          });
+          break;
+        case AssistantOperationKind.TaskExamples:
+          generatedResult = await aiClient.generateTaskExamples(studentId, {
+            mode: GenerationMode.Standard,
+          });
+          break;
+        case AssistantOperationKind.TaskExamplesAlternatives:
+          generatedResult = await aiClient.generateTaskExamples(studentId, {
+            mode: GenerationMode.Alternatives,
           });
           break;
         default:
@@ -92,7 +101,14 @@ export function useAssistant(): UseAssistantResult {
             "Превышен лимит запросов. Пожалуйста, подождите и попробуйте снова",
           );
         } else if (status === 404) {
-          setGlobalError("Ученик не найден");
+          if (
+            operationKind === AssistantOperationKind.TaskExamples ||
+            operationKind === AssistantOperationKind.TaskExamplesAlternatives
+          ) {
+            setGlobalError("Сначала сгенерируйте план следующего урока");
+          } else {
+            setGlobalError("Ученик не найден");
+          }
         } else {
           setGlobalError(
             "Не удалось получить ответ ИИ-ассистента. Попробуйте еще раз позже",

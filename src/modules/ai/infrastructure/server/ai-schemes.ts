@@ -1,11 +1,14 @@
 import z from "zod";
-import { NextLessonPlanMode } from "@/modules/ai/application/generate-next-lesson-plan/constants";
-import { PracticeMode } from "@/modules/ai/application/generate-practice/constants";
+import { GenerationMode } from "@/modules/ai/domain/generation-mode";
 
 export const generateNextLessonPlanRequestSchema = z.object({
-  mode: z.enum(NextLessonPlanMode),
+  mode: z.enum(GenerationMode),
 });
 
 export const generatePracticeRequestSchema = z.object({
-  mode: z.enum(PracticeMode),
+  mode: z.enum(GenerationMode),
+});
+
+export const generateTaskExamplesRequestSchema = z.object({
+  mode: z.enum(GenerationMode),
 });

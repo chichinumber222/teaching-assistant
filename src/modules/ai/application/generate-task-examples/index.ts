@@ -5,10 +5,10 @@ import type { GetStudentDossier } from "@/modules/students/application/get-stude
 import { GetStudentDossierResultKind } from "@/modules/students/application/get-student-dossier/constants";
 import { buildTextSnapshot } from "@/modules/students/application/get-student-dossier/lib/build-text-snapshot";
 import type {
-  GeneratePracticeFromNextLessonPlanInput,
-  GeneratePracticeFromNextLessonPlanResult,
+  GenerateTaskExamplesInput,
+  GenerateTaskExamplesResult,
 } from "./types";
-import { GeneratePracticeFromNextLessonPlanResultKind } from "./constants";
+import { GenerateTaskExamplesResultKind } from "./constants";
 import { buildPrompt } from "./lib/prompt";
 import { getTemperature } from "./lib/temperature";
 import { buildPrompt as buildPlanPrompt } from "../generate-next-lesson-plan/lib/prompt";
@@ -16,7 +16,7 @@ import { buildPrompt as buildPlanPrompt } from "../generate-next-lesson-plan/lib
 const LESSON_REPORTS_LIMIT = 5;
 const MAX_TOKENS_TO_GENERATE = 800;
 
-export class GeneratePracticeFromNextLessonPlan {
+export class GenerateTaskExamples {
   constructor(
     private readonly getStudentDossier: GetStudentDossier,
     private readonly languageModel: LanguageModel,
@@ -24,8 +24,8 @@ export class GeneratePracticeFromNextLessonPlan {
   ) {}
 
   async execute(
-    input: GeneratePracticeFromNextLessonPlanInput,
-  ): Promise<GeneratePracticeFromNextLessonPlanResult> {
+    input: GenerateTaskExamplesInput,
+  ): Promise<GenerateTaskExamplesResult> {
     const dossierResult = this.getStudentDossier.execute({
       teacherUserId: input.teacherUserId,
       studentId: input.studentId,
@@ -34,7 +34,7 @@ export class GeneratePracticeFromNextLessonPlan {
 
     if (dossierResult.kind === GetStudentDossierResultKind.TEACHER_NOT_FOUND) {
       return {
-        kind: GeneratePracticeFromNextLessonPlanResultKind.TEACHER_NOT_FOUND,
+        kind: GenerateTaskExamplesResultKind.TEACHER_NOT_FOUND,
       };
     }
 
@@ -42,13 +42,13 @@ export class GeneratePracticeFromNextLessonPlan {
       dossierResult.kind === GetStudentDossierResultKind.USER_IS_NOT_TEACHER
     ) {
       return {
-        kind: GeneratePracticeFromNextLessonPlanResultKind.USER_IS_NOT_TEACHER,
+        kind: GenerateTaskExamplesResultKind.USER_IS_NOT_TEACHER,
       };
     }
 
     if (dossierResult.kind === GetStudentDossierResultKind.STUDENT_NOT_FOUND) {
       return {
-        kind: GeneratePracticeFromNextLessonPlanResultKind.STUDENT_NOT_FOUND,
+        kind: GenerateTaskExamplesResultKind.STUDENT_NOT_FOUND,
       };
     }
 
@@ -58,7 +58,7 @@ export class GeneratePracticeFromNextLessonPlan {
 
     if (!latestPlan) {
       return {
-        kind: GeneratePracticeFromNextLessonPlanResultKind.NEXT_LESSON_PLAN_NOT_FOUND,
+        kind: GenerateTaskExamplesResultKind.NEXT_LESSON_PLAN_NOT_FOUND,
       };
     }
 
@@ -73,7 +73,7 @@ export class GeneratePracticeFromNextLessonPlan {
       latestPlan.sourcePrompt !== rebuiltPlanPrompt
     ) {
       return {
-        kind: GeneratePracticeFromNextLessonPlanResultKind.NEXT_LESSON_PLAN_OUTDATED,
+        kind: GenerateTaskExamplesResultKind.NEXT_LESSON_PLAN_OUTDATED,
       };
     }
 
@@ -96,7 +96,7 @@ export class GeneratePracticeFromNextLessonPlan {
     });
 
     return {
-      kind: GeneratePracticeFromNextLessonPlanResultKind.GENERATED,
+      kind: GenerateTaskExamplesResultKind.GENERATED,
       text: result.text,
     };
   }

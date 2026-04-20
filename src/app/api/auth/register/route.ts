@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
     if (result.kind === RegisterUserResultKind.INVALID_PASSWORD) {
       return NextResponse.json(
         {
-          message: "invalid_password",
+          message: "Invalid password",
           reason: {
             code: "auth.invalid_password",
             details: mapPasswordPolicyErrorCodeToPasswordReasonErrorCode(

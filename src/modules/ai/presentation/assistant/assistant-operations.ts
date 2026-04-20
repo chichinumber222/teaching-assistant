@@ -3,6 +3,8 @@ export enum AssistantOperationKind {
   NextLessonPlanAlternatives = "next-lesson-plan-alternatives",
   Practice = "practice",
   PracticeAlternatives = "practice-alternatives",
+  TaskExamples = "task-examples",
+  TaskExamplesAlternatives = "task-examples-alternatives",
 }
 
 export type AssistantOperation = {
@@ -11,7 +13,7 @@ export type AssistantOperation = {
   description: string;
 };
 
-export const ASSISTANT_OPERATIONS: AssistantOperation[] = [
+export const PRIMARY_ASSISTANT_OPERATIONS: AssistantOperation[] = [
   {
     kind: AssistantOperationKind.NextLessonPlan,
     title: "План следующего урока",
@@ -20,7 +22,7 @@ export const ASSISTANT_OPERATIONS: AssistantOperation[] = [
   },
   {
     kind: AssistantOperationKind.NextLessonPlanAlternatives,
-    title: "План следующего урока (alt)",
+    title: "План следующего урока (свободный)",
     description:
       "Более свободный режим по генерации плана следующего урока для поиска нестандартных идей и подходов (на основе данных ученика и истории занятий)",
   },
@@ -32,8 +34,23 @@ export const ASSISTANT_OPERATIONS: AssistantOperation[] = [
   },
   {
     kind: AssistantOperationKind.PracticeAlternatives,
-    title: "Практика (alt)",
+    title: "Практика (свободный)",
     description:
       "Более свободный и смелый режим для генерации заданий (на основе данных ученика и истории занятий)",
+  },
+];
+
+export const FOLLOW_UP_ASSISTANT_OPERATIONS: AssistantOperation[] = [
+  {
+    kind: AssistantOperationKind.TaskExamples,
+    title: "Примеры заданий",
+    description:
+      "Стандартный режим генерации нескольких упражнений/задач/примеров на основе последнего актуального плана следующего урока, а также данных ученика",
+  },
+  {
+    kind: AssistantOperationKind.TaskExamplesAlternatives,
+    title: "Примеры заданий (свободный)",
+    description:
+      "Более свободный и смелый режим генерации заданий на основе последнего актуального плана следующего урока, а также данных ученика",
   },
 ];
