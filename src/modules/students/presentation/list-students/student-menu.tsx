@@ -19,6 +19,7 @@ import {
   PopoverTrigger,
 } from "@/shared/ui/components/popover";
 import { cn } from "@/shared/ui/lib/utils";
+import { IconDotsVertical } from "@tabler/icons-react";
 
 const MenuTrigger = React.forwardRef<
   HTMLButtonElement,
@@ -37,7 +38,7 @@ const MenuTrigger = React.forwardRef<
       )}
       aria-label="Открыть меню действий"
     >
-      <span aria-hidden="true">⋮</span>
+      <IconDotsVertical aria-hidden="true" size={18} stroke={2} />
     </Button>
   );
 });

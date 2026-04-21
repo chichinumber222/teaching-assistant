@@ -1,6 +1,13 @@
-import { AuthLink } from "@/modules/auth/presentation/components/auth-link";
 import { APP_ROUTES } from "@/shared/config/routes";
+import { NavigationLink } from "@/shared/ui/components/navigation-link";
+import { NavigationLinkDirection } from "@/shared/ui/components/navigation-link";
 
 export default function AccountPageAction() {
-  return <AuthLink href={APP_ROUTES.students}>К ученикам</AuthLink>;
+  return (
+    <NavigationLink
+      toHref={APP_ROUTES.students}
+      label="К ученикам"
+      direction={NavigationLinkDirection.BACK}
+    />
+  );
 }

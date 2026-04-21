@@ -1,35 +1,55 @@
-"use client";
-
 import Link from "next/link";
-import Image from "next/image";
 import { Button } from "@/shared/ui/components/button";
-import ArrowLeft from "@/shared/ui/assets/icons/arrow-left.png";
-import { clsx } from "clsx";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import { cn } from "@/shared/ui/lib/utils";
 
-export type NavigationLinkProps = {
-  toHref: string;
-  variant?: NavigationLinkVariant;
-};
-
-export enum NavigationLinkVariant {
+export enum NavigationLinkDirection {
   BACK = "BACK",
   FORWARD = "FORWARD",
 }
 
+export type NavigationLinkProps = {
+  toHref: string;
+  label?: string;
+  ariaLabel?: string;
+  direction?: NavigationLinkDirection;
+  className?: string;
+};
+
 export function NavigationLink({
   toHref,
-  variant = NavigationLinkVariant.BACK,
+  label,
+  ariaLabel,
+  direction = NavigationLinkDirection.BACK,
+  className,
 }: NavigationLinkProps) {
+  const isBack = direction === NavigationLinkDirection.BACK;
+  const Icon = isBack ? IconChevronLeft : IconChevronRight;
+  const iconClassName = label ? "size-5" : "size-6";
+
   return (
-    <Button asChild variant="ghost" size="sm">
-      <Link href={toHref}>
-        <Image
-          src={ArrowLeft}
-          alt={variant}
-          className={clsx("mr-2 h-5 w-5", {
-            "rotate-180": variant === NavigationLinkVariant.FORWARD,
-          })}
-        />
+    <Button
+      asChild
+      variant="ghost"
+      size={label ? "lg" : "icon-lg"}
+      className={cn(
+        "text-muted-foreground hover:text-foreground",
+        label && "gap-1.5 px-2",
+        className,
+      )}
+    >
+      <Link href={toHref} aria-label={label ?? ariaLabel}>
+        {isBack ? (
+          <>
+            <Icon aria-hidden="true" className={iconClassName} stroke={1.8} />
+            {label ? <span>{label}</span> : null}
+          </>
+        ) : (
+          <>
+            {label ? <span>{label}</span> : null}
+            <Icon aria-hidden="true" className={iconClassName} stroke={1.8} />
+          </>
+        )}
       </Link>
     </Button>
   );

@@ -35,7 +35,6 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/shared/ui/components/tooltip";
-import { Separator } from "@/shared/ui/components/separator";
 
 type AssistantViewProps = {
   student: Student;

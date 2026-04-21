@@ -27,6 +27,7 @@ import {
   TableRow,
 } from "@/shared/ui/components/table";
 import { ItemActionsMenu, TableActionsMenu } from "./student-menu";
+import { IconChevronRight } from "@tabler/icons-react";
 
 type StudentsListProps = {
   students: Student[];
@@ -84,7 +85,7 @@ export function StudentsList({ students }: StudentsListProps) {
                   <TableHead>Ученик</TableHead>
                   <TableHead>Предмет</TableHead>
                   <TableHead>Уровень</TableHead>
-                  <TableHead className="w-40">
+                  <TableHead className="w-10">
                     <span className="sr-only">Переход</span>
                   </TableHead>
                   <TableHead className="w-12 pr-2 text-right">
@@ -106,9 +107,21 @@ export function StudentsList({ students }: StudentsListProps) {
                       <div className="truncate">{student.level ?? "—"}</div>
                     </TableCell>
                     <TableCell>
-                      <Button asChild variant="link" size="sm">
-                        <Link href={APP_ROUTES.student(student.id)}>
-                          Перейти
+                      <Button
+                        asChild
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-foreground"
+                      >
+                        <Link
+                          href={APP_ROUTES.student(student.id)}
+                          aria-label={`Открыть ученика`}
+                        >
+                          <IconChevronRight
+                            aria-hidden="true"
+                            size={18}
+                            stroke={2}
+                          />
                         </Link>
                       </Button>
                     </TableCell>

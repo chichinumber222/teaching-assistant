@@ -16,13 +16,13 @@ export type AssistantOperation = {
 export const PRIMARY_ASSISTANT_OPERATIONS: AssistantOperation[] = [
   {
     kind: AssistantOperationKind.NextLessonPlan,
-    title: "План следующего урока",
+    title: "План урока",
     description:
       "Краткий и структурированный план следующего урока с этим учеником (на основе его данных и истории занятий)",
   },
   {
     kind: AssistantOperationKind.NextLessonPlanAlternatives,
-    title: "План следующего урока (свободный)",
+    title: "План урока (свободный)",
     description:
       "Более свободный режим по генерации плана следующего урока для поиска нестандартных идей и подходов (на основе данных ученика и истории занятий)",
   },

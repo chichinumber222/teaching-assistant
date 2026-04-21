@@ -27,6 +27,7 @@ import {
   TableRow,
 } from "@/shared/ui/components/table";
 import { createDateFormatter } from "@/shared/lib/date/formatter";
+import { IconChevronRight, IconDotsVertical } from "@tabler/icons-react";
 
 const dateFormatter = createDateFormatter();
 
@@ -93,7 +94,11 @@ export function LessonReportsList({
                       className="text-muted-foreground hover:bg-muted hover:text-foreground"
                       aria-label={`Меню для занятия от ${dateFormatter(report.lessonAt)}`}
                     >
-                      <span aria-hidden="true">⋮</span>
+                      <IconDotsVertical
+                        aria-hidden="true"
+                        size={18}
+                        stroke={2}
+                      />
                     </Button>
                   </ItemActions>
                 </Item>
@@ -137,15 +142,19 @@ export function LessonReportsList({
                         variant="ghost"
                         size="icon-sm"
                         className="text-muted-foreground hover:bg-muted hover:text-foreground"
-                        aria-label={`Открыть карточку занятия от ${dateFormatter(report.lessonAt)}`}
                       >
                         <Link
                           href={APP_ROUTES.studentLessonReport(
                             report.studentId,
                             report.id,
                           )}
+                          aria-label={`Открыть карточку занятия от ${dateFormatter(report.lessonAt)}`}
                         >
-                          <span aria-hidden="true">→</span>
+                          <IconChevronRight
+                            aria-hidden="true"
+                            size={18}
+                            stroke={2}
+                          />
                         </Link>
                       </Button>
                     </TableCell>
@@ -157,7 +166,11 @@ export function LessonReportsList({
                         className="text-muted-foreground hover:bg-muted hover:text-foreground"
                         aria-label={`Меню для занятия от ${dateFormatter(report.lessonAt)}`}
                       >
-                        <span aria-hidden="true">⋮</span>
+                        <IconDotsVertical
+                          aria-hidden="true"
+                          size={18}
+                          stroke={2}
+                        />
                       </Button>
                     </TableCell>
                   </TableRow>
